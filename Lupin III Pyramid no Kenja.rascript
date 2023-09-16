@@ -1,6 +1,14 @@
 // Lupin III: Pyramid no Kenja
 // #ID = 20465
 
+// $000012: [8-bit] Current Game Level setting
+//          0x00 = Easy
+//          0x01 = Normal
+//          0x02 = Hard
+//          0x03 = Super
+//          0x04 = Hyper
+function GameDifficulty() => byte(0x000012)
+
 // $000014: [8-bit] Lupin Color (costume) setting
 //          0x00 = Part I
 //          0x01 = Part II
@@ -14,16 +22,106 @@
 //          0x09 = Princess (not accessible normally, might be a secret unlockable?)
 function PlayerCostume() => byte(0x000014)
 
+// $0000A1: [8-bit] The level ID on the level results screen
+//          0x01 = Level 1 (Pyramid Entrance)
+//          0x02 = Level 2 (Underground Fortress)
+//          0x03 = Level 3 (Desert Tower)
+//          0x04 = Level 4 (Mountain Fortress)
+//          0x05 = Level 5 (Ancient Ruins)
+//          0x06 = Level 6 (Valley Fortress)
+//          0x07 = Level 7 (Jungle Temple)
+//          0x08 = Level 8 (Botanical Research Institute)
+//          0x09 = Level 9 (Jungle Watchtower)
+//          0x0a = Level 10 (Artificial Island)
+//          0x0b = Level 11 (Water Quality Control Center)
+//          0x0c = Level 12 (Undersea Base)
+//          0x0d = Level 13 (Genetics Laboratory)
+//          0x0e = Level 14 (Power Reactor)
+//          0x0f = Level 15 (Power Center)
+function ResultsScreenLevelID() => byte(0x0000A1)
+
 // $0000A9: [8-bit] Demo Mode
 //          0x00 = Demo Mode Not Active
 //          0x01 = Demo Mode Active
 function DemoMode() => byte(0x0000A9)
+
+// $0000E2: [8-bit] Flag that specifies next area to load into. Only updates right before being used.
+//          0x00 = Level 1
+//          0x01 = Level 2
+//          0x02 = [Unused] Alt Level 2
+//          0x03 = Level 3
+//          0x04 = Level 4 (Room 1)
+//          0x05 = Level 4 (Room 2)
+//          0x06 = Level 5 (Room 1)
+//          0x07 = Level 5 (Room 2)
+//          0x08 = Level 6
+//          0x09 = [Unused] CRASH
+//          0x0a = Level 7 (Room 1)
+//          0x0b = Level 7 (Room 2)
+//          0x0c = Level 8
+//          0x0d = Level 9 (Room 1)
+//          0x0e = Level 9 (Room 2)
+//          0x0f = Level 10 (Room 1)
+//          0x10 = Level 10 (Room 2)
+//          0x11 = [Unused] CRASH
+//          0x12 = Level 11
+//          0x13 = [Unused] CRASH
+//          0x14 = Level 12
+//          0x15 = Level 13
+//          0x16 = Level 14
+//          0x17 = [Unused] Test Room?
+//          0x18 = Level 15 (Room 1)
+//          0x19 = [Unused] CRASH
+//          0x1a = Level 15 (Room 2)
+//          0x1b = Level 15 (Room 3)
+function LevelID() => byte(0x0000E2)
 
 // $13E502: [8-bit] Can be used to determine if in game or in menus
 //          0x00 = Viewing any menu screen (Including level results, if not opened from Treasure Room)
 //          0x01 = Viewing level results screen from Treasure Room
 //          0x12 = In Game
 function GameState() => byte(0x13E502)
+
+// $1865AA: [16-bit] Survival mode timer
+function SurvivalModeTimer() => word(0x1865AA)
+
+// $18B2D0: [8-bit] Flag for collecting the key to the temple in Level 5
+function Level5KeyFlag() => byte(0x18B2D0)
+
+// $18B2D2: [8-bit] The game is paused if this value is greater than 0x00
+function GamePaused() => byte(0x18B2D2)
+
+// $1955A1: [8-bit] Current players health (Survival Mode)
+function SurvivalModePlayerHealth() => byte(0x1955A1)
+
+// $19F3BD: [8-bit] [Level 9] Puzzle door flag
+//          0x00 = Initial state
+//          0x01 = 1 correct button pushed
+//          0x02 = 2 correct buttons pushed
+//          0x03 = 3 correct buttons pushed
+//          0x04 = Puzzle solved
+function Level9PuzzleDoorState() => byte(0x19F3BD)
+
+// $19F8A1: [8-bit] Whether or not the player currently has the rubber boots
+//          0x00 = Does not have rubber boots
+//          0x01 = Has rubber boots
+function PlayerHasRubberBoots() => byte(0x19F8A1)
+
+// $19F8A8: [8-bit] Current number of gold healing items held by the player
+function PlayerHeldGoldHealItems() => byte(0x19F8A8)
+
+// $19FC80: [8-bit] Current round in survival mode (0 based)
+function SurvivalModeRound() => byte(0x19FC80)
+
+// $1A0EFA: [8-bit] Number of enemies in the round in survival mode
+//          If set to 0x00, survival mode is cleared
+function SurvivalModeEnemyCount() => byte(0x1A0EFA)
+
+// $1AEBC0: [16-bit] Player X Location
+function PlayerXLocation() => word(0x1AEBC0)
+
+// $1AEBC4: [16-bit] Player Y Location
+function PlayerYLocation() => word(0x1AEBC4)
 
 // $1AEBD6: [8-bit] Flag identifying the current animation set the player character is in
 //          0x00 = Standing Idle (Lupin)
@@ -72,12 +170,73 @@ function GameState() => byte(0x13E502)
 //          0x38 = Sprint Slide Attack
 function PlayerAnimationSet() => byte(0x1AEBD6)
 
+// $1AEBE4: [8-bit] Can be used to determine if the character is positioned over an electric floor (ignores Z location)
+function PlayerIsOverElectricFloor() => byte(0x1AEBE4)
+
+// $1AEC0C: [16-bit] Player Z Location
+function PlayerZLocation() => word(0x1AEC0C)
+
+// $1AEC11: [8-bit] Current value of players HP
+function PlayerHP() => byte(0x1AEC11)
+
+// $1B3C48: [16-bit] [Level 6] Pillar Rolling State
+//          0xff92 = Initial state
+//          0xfe94 = Right before hitting bottom of hill
+//          0xfe6c = After crushing stationary enemy
+//          0xfe1c = Final state
+function Level6PillarRollingState() => word(0x1B3C48)
+
 // -----------------
 // --- Variables ---
 // -----------------
 
+easy_difficulty = 0x00
+normal_difficulty = 0x01
+hard_difficulty = 0x02
+super_difficulty = 0x03
+hyper_difficulty = 0x04
+
+level_1 = 0x00
+level_2 = 0x01
+level_3 = 0x03
+level_4_1 = 0x04
+level_4_2 = 0x05
+level_5_1 = 0x06
+level_5_2 = 0x07
+level_6 = 0x08
+level_7_1 = 0x0A
+level_7_2 = 0x0B
+level_8 = 0x0C
+level_9_1 = 0x0D
+level_9_2 = 0x0E
+level_10_1 = 0x0F
+level_10_2 = 0x10
+level_11 = 0x12
+level_12 = 0x14
+level_13 = 0x15
+level_14 = 0x16
+level_15_1 = 0x18
+level_15_2 = 0x1A
+level_15_3 = 0x1B
+
+results_level_1 = 0x01
+results_level_2 = 0x02
+results_level_3 = 0x03
+results_level_4 = 0x04
+results_level_5 = 0x05
+results_level_6 = 0x06
+results_level_7 = 0x07
+results_level_8 = 0x08
+results_level_9 = 0x09
+results_level_10 = 0x0A
+results_level_11 = 0x0B
+results_level_12 = 0x0C
+results_level_13 = 0x0D
+results_level_14 = 0x0E
+results_level_15 = 0x0F
+
 // An entity is an NPC character in the game, like enemies or partner characters
-entity_memory_location = 0x1B5A30 // The start of contiguous blocks of entity data
+entity_memory_location = 0x1B5A30 // The start of contiguous blocks of entity data (same as Player X Location)
 entity_memory_size = 0x9C
 
 entity_type_offset = 0x47
@@ -92,6 +251,11 @@ all_entity_slots = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17
 function NotInDemoMode() => never(DemoMode() == 0x01)
 
 function InGame() => never(GameState() != 0x12)
+
+function InMenus() => GameState() == 0
+
+function ClearedLevel(min_difficulty, level_id, results_level_id) => never(DemoMode() == 0x01) && never(PlayerHP() == 0x00) && never(GameDifficulty() < min_difficulty) &&
+              once(LevelID() == level_id) && InMenus() && prev(GameState()) == 0x12 && ResultsScreenLevelID() == results_level_id
 
 function PlayingAsLupin() => PlayerCostume() == 0x00 || PlayerCostume() == 0x01 || PlayerCostume() == 0x02 || PlayerCostume() == 0x07
 
@@ -126,6 +290,112 @@ function IsPlayerDamagingAnyPartner() {
 // --------------------
 // --- Achievements ---
 // --------------------
+
+// For level clear achievements, the level ID used should always be the part of the level that contains the exit teleporter
+achievement(
+    title = "The Return of Lupin the Third", points = 1,
+    description = "Clear Level 1: Pyramid Entrance on Normal difficulty or higher",
+    id = 350710, badge = "395420", published = "8/30/2023 1:49:07 AM", modified = "8/30/2023 1:49:07 AM",
+    trigger = ClearedLevel(normal_difficulty, level_1, results_level_1)
+)
+
+achievement(
+    title = "So this is where Dick Clark lives", points = 1,
+    description = "Clear Level 2: Underground Fortress on Normal difficulty or higher",
+    id = 353504, badge = "398245", published = "9/4/2023 10:13:00 PM", modified = "9/4/2023 10:13:00 PM",
+    trigger = ClearedLevel(normal_difficulty, level_2, results_level_2)
+)
+
+achievement(
+    title = "The friggin' grave robbers here had it made", points = 1,
+    description = "Clear Level 3: Desert Tower on Normal difficulty or higher",
+    id = 350711, badge = "395421", published = "8/30/2023 1:54:57 AM", modified = "8/30/2023 1:54:57 AM",
+    trigger = ClearedLevel(normal_difficulty, level_3, results_level_3)
+)
+
+achievement(
+    title = "What, are you gonna climb Mt. Everest or something?", points = 2,
+    description = "Clear Level 4: Mountain Fortress on Normal difficulty or higher",
+    id = 353858, badge = "398628", published = "9/6/2023 1:58:13 AM", modified = "9/9/2023 3:12:58 AM",
+    trigger = ClearedLevel(normal_difficulty, level_4_1, results_level_4)
+)
+
+achievement(
+    title = "Do they replace all those pillars every time someone comes here?", points = 2,
+    description = "Clear Level 5: Ancient Ruins on Normal difficulty or higher",
+    id = 353859, badge = "398629", published = "9/6/2023 2:06:51 AM", modified = "9/9/2023 3:12:58 AM",
+    trigger = ClearedLevel(normal_difficulty, level_5_1, results_level_5)
+)
+
+achievement(
+    title = "I'd actually rather be in Disneyland", points = 2,
+    description = "Clear Level 6: Valley Fortress on Normal difficulty or higher",
+    id = 353860, badge = "398630", published = "9/6/2023 2:12:46 AM", modified = "9/6/2023 2:12:46 AM",
+    trigger = ClearedLevel(normal_difficulty, level_6, results_level_6)
+)
+
+achievement(
+    title = "It's time for a round of big bang boomerang", points = 3,
+    description = "Clear Level 7: Jungle Temple on Normal difficulty or higher",
+    id = 354172, badge = "399086", published = "9/8/2023 12:23:30 AM", modified = "9/9/2023 10:50:05 PM",
+    trigger = ClearedLevel(normal_difficulty, level_7_1, results_level_7)
+)
+
+achievement(
+    title = "I think the jungle's getting to him", points = 3,
+    description = "Clear Level 8: Botanical Research Institute on Normal difficulty or higher",
+    id = 354173, badge = "399087", published = "9/8/2023 12:29:33 AM", modified = "9/8/2023 12:29:33 AM",
+    trigger = ClearedLevel(normal_difficulty, level_8, results_level_8)
+)
+
+achievement(
+    title = "Dammit, this is very mysterious, and I hate mysteries!", points = 3,
+    description = "Clear Level 9: Jungle Watchtower on Normal difficulty or higher",
+    id = 354175, badge = "399089", published = "9/8/2023 1:25:54 AM", modified = "9/9/2023 3:12:58 AM",
+    trigger = ClearedLevel(normal_difficulty, level_9_2, results_level_9)
+)
+
+achievement(
+    title = "Better not be those 3 hour tours you hear about on Nick at Night", points = 4,
+    description = "Clear Level 10: Artificial Island on Normal difficulty or higher",
+    id = 354497, badge = "399421", published = "9/9/2023 12:16:05 AM", modified = "9/11/2023 10:50:15 PM",
+    trigger = ClearedLevel(normal_difficulty, level_10_1, results_level_10)
+)
+
+achievement(
+    title = "Breaking in? I prefer to call it \"dropping by\"", points = 4,
+    description = "Clear Level 11: Water Quality Control Center on Normal difficulty or higher",
+    id = 354498, badge = "399422", published = "9/9/2023 12:33:16 AM", modified = "9/9/2023 12:33:16 AM",
+    trigger = ClearedLevel(normal_difficulty, level_11, results_level_11)
+)
+
+achievement(
+    title = "This'd be really homey if I were a spider or a corpse", points = 4,
+    description = "Clear Level 12: Undersea Base on Normal difficulty or higher",
+    id = 354499, badge = "399492", published = "9/9/2023 12:48:44 AM", modified = "9/9/2023 12:48:44 AM",
+    trigger = ClearedLevel(normal_difficulty, level_12, results_level_12)
+)
+
+achievement(
+    title = "Don't blame yourselves, the vault's all mine!", points = 5,
+    description = "Clear Level 13: Genetics Laboratory on Normal difficulty or higher",
+    id = 354503, badge = "399496", published = "9/9/2023 1:20:28 AM", modified = "9/9/2023 1:20:28 AM",
+    trigger = ClearedLevel(normal_difficulty, level_13, results_level_13)
+)
+
+achievement(
+    title = "They're like damn cockroaches!", points = 5,
+    description = "Clear Level 14: Power Reactor on Normal difficulty or higher",
+    id = 345652, badge = "391910", published = "8/16/2023 1:32:24 AM", modified = "8/30/2023 1:49:46 AM",
+    trigger = ClearedLevel(normal_difficulty, level_14, results_level_14)
+)
+
+achievement(
+    title = "King Lupin the Third", points = 25,
+    description = "Clear Level 15: Power Center on Normal difficulty or higher and successfully steal the pink diamond",
+    id = 354509, badge = "399548", published = "9/9/2023 3:10:45 AM", modified = "9/9/2023 3:10:45 AM",
+    trigger = ClearedLevel(normal_difficulty, level_15_3, results_level_15)
+)
 
 achievement(
     title = "Friggin' Lupin", points = 1,
