@@ -248,13 +248,16 @@ all_entity_slots = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17
 // --- Logic Functions ---
 // -----------------------
 
+// Converts provided number of seconds to frame time (60fps)
+function Seconds(seconds) => seconds * 60
+
 function NotInDemoMode() => never(DemoMode() == 0x01)
 
-function InGame() => never(GameState() != 0x12)
+function InGame() => NotInDemoMode() && never(GameState() != 0x12)
 
-function InMenus() => GameState() == 0
+function InMenus() => GameState() == 0x00
 
-function ClearedLevel(min_difficulty, level_id, results_level_id) => never(DemoMode() == 0x01) && never(PlayerHP() == 0x00) && never(GameDifficulty() < min_difficulty) &&
+function ClearedLevel(min_difficulty, level_id, results_level_id) => NotInDemoMode() && never(PlayerHP() == 0x00) && never(GameDifficulty() < min_difficulty) &&
               once(LevelID() == level_id) && InMenus() && prev(GameState()) == 0x12 && ResultsScreenLevelID() == results_level_id
 
 function PlayingAsLupin() => PlayerCostume() == 0x00 || PlayerCostume() == 0x01 || PlayerCostume() == 0x02 || PlayerCostume() == 0x07
@@ -286,6 +289,21 @@ function IsPlayerDamagingAnyPartner() {
     }
     return condition_met
 }
+
+// Detects the moment when the player begins playing a level, either by first load into it or retry after having previously died
+function StartOfLevel() => once(PlayerHP() == 0x10) && once((once(prev(word(0x13E502)) == 0) || once(prev(PlayerHP()) == 0)) && PlayerHP() == 0x10)
+
+function Level2AllGlassBroken() => byte(0x0047F6) == 0x00 && byte(0x0057FE) == 0x00 && byte(0x0049AE) == 0x00 && 
+              byte(0x004B0A) == 0x00 && byte(0x005E8A) == 0x00 && byte(0x00854C) == 0x00 && byte(0x013246) == 0x00 &&
+              byte(0x004ED4) == 0x00 && byte(0x008554) == 0x00 && byte(0x009CFC) == 0x00 && byte(0x011E3E) == 0x00 &&
+              byte(0x00F8CC) == 0x00 && byte(0x00FED4) == 0x00
+
+function Level5KeyCollected() => once(once(prev(Level5KeyFlag()) == 0x00) && Level5KeyFlag() == 0x01)
+
+// Once the player has gone higher up than the provided activate_at position, the achivement will reset if the player ever drops below the provided reset_threshold position
+function OneWayZPositionCheckpointPassed(activate_at, reset_threshold) => never((once(PlayerZLocation() <= activate_at) && PlayerZLocation() >= reset_threshold))
+
+function ResetIfTimeSpentInLevelExceeds(frame_time, level_id) => never(repeated(frame_time, LevelID() == level_id))
 
 // --------------------
 // --- Achievements ---
@@ -398,7 +416,42 @@ achievement(
 )
 
 achievement(
+    title = "He has all the subtly and nuance of an electrocuted baboon", points = 0,
+    description = "Miss the last jump and get electrocuted in Level 1",
+    id = 348926, badge = "394173", published = "8/26/2023 8:51:57 PM", modified = "8/26/2023 8:51:57 PM",
+    trigger = InGame() && PlayerHP() == 0x00 && LevelID() == level_1 && 
+              PlayerAnimationSet() == 0x27 && PlayerZLocation() > 0xFF40
+)
+
+achievement(
+    title = "A string of crimes longer than that chin of yours", points = 2,
+    description = "Break every pane of glass in Level 2",
+    id = 346839, badge = "392203", published = "8/22/2023 2:20:27 AM", modified = "8/22/2023 11:49:44 PM",
+    trigger = InGame() && never(PlayerHP() == 0x00) && never(LevelID() != level_2) && Level2AllGlassBroken()
+)
+
+achievement(
+    title = "Punks thought they were dealing with amateurs", points = 5,
+    description = "Climb to the top of the mountain without ever falling back down to a previous section in Level 4",
+    id = 354689, badge = "399668", published = "9/9/2023 10:41:36 PM", modified = "9/11/2023 10:53:38 PM",
+    trigger = InGame() && never(LevelID() != level_4_1) && never(PlayerHP() == 0) && StartOfLevel() &&
+              OneWayZPositionCheckpointPassed(0xFFB2, 0xFFCD) && OneWayZPositionCheckpointPassed(0xFEFD, 0xFF1C) &&
+              OneWayZPositionCheckpointPassed(0xFE9A, 0xFEAB) && OneWayZPositionCheckpointPassed(0xFE0E, 0xFE34) &&
+              OneWayZPositionCheckpointPassed(0xFDBB, 0xFDED) &&
+              trigger_when(once(PlayerZLocation() < 0xFD88)) && unless(PlayerZLocation() < 0x10)
+)
+
+achievement(
+    title = "Hey, I wonder what gas station they stole this key from", points = 5,
+    description = "Get the key to the temple within 2 minutes and 10 seconds from starting in Level 5",
+    id = 354699, badge = "399690", published = "9/9/2023 11:51:09 PM", modified = "9/9/2023 11:51:09 PM",
+    trigger = InGame() && never(PlayerHP() == 0x00) && once(PlayerHP() == 0x10) && LevelID() == level_5_1 && StartOfLevel() &&
+              ResetIfTimeSpentInLevelExceeds(Seconds(130), level_5_1) && unless(GamePaused() > 0x00) && trigger_when(Level5KeyCollected())
+)
+
+achievement(
     title = "Friggin' Lupin", points = 1,
     description = "Play as Lupin and land a punch on one of your partners",
-    trigger = NotInDemoMode() && InGame() && PlayingAsLupin() && PlayerIsPunching() && IsPlayerDamagingAnyPartner()
+    id = 354507, badge = "399500", published = "9/9/2023 2:31:26 AM", modified = "9/15/2023 12:56:47 AM",
+    trigger = InGame() && PlayingAsLupin() && PlayerIsPunching() && IsPlayerDamagingAnyPartner()
 )
