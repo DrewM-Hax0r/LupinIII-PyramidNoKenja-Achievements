@@ -105,7 +105,7 @@ function Level9PuzzleDoorState() => byte(0x19F3BD)
 // $19F8A1: [8-bit] Whether or not the player currently has the rubber boots
 //          0x00 = Does not have rubber boots
 //          0x01 = Has rubber boots
-function PlayerHasRubberBoots() => byte(0x19F8A1)
+function PlayerRubberBootsFlag() => byte(0x19F8A1)
 
 // $19F8A8: [8-bit] Current number of gold healing items held by the player
 function PlayerHeldGoldHealItems() => byte(0x19F8A8)
@@ -171,7 +171,8 @@ function PlayerYLocation() => word(0x1AEBC4)
 function PlayerAnimationSet() => byte(0x1AEBD6)
 
 // $1AEBE4: [8-bit] Can be used to determine if the character is positioned over an electric floor (ignores Z location)
-function PlayerIsOverElectricFloor() => byte(0x1AEBE4)
+//          0x04 when the player is over an electric floor  
+function PlayerOverElectricFloorFlag() => byte(0x1AEBE4)
 
 // $1AEC0C: [16-bit] Player Z Location
 function PlayerZLocation() => word(0x1AEC0C)
@@ -240,6 +241,8 @@ entity_memory_location = 0x1B5A30 // The start of contiguous blocks of entity da
 entity_memory_size = 0x9C
 
 entity_type_offset = 0x47
+entity_animation_set_offset = 0x6E
+entity_knock_out_offset = 0x90
 entity_partner_friendly_fire_counter_offset = 0x92 // If the entity is a partner character, this offset points to a value that increases each time the player damages this partner
 
 all_entity_slots = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18]
@@ -262,6 +265,8 @@ function ClearedLevel(min_difficulty, level_id, results_level_id) => NotInDemoMo
 
 function PlayingAsLupin() => PlayerCostume() == 0x00 || PlayerCostume() == 0x01 || PlayerCostume() == 0x02 || PlayerCostume() == 0x07
 
+function PlayingAsGoemon() => PlayerCostume() == 0x04
+
 function PlayerIsPunching() => PlayerAnimationSet() == 0x2E || PlayerAnimationSet() == 0x2F ||
                PlayerAnimationSet() == 0x4D || PlayerAnimationSet() == 0x2D || PlayerAnimationSet() == 0x5B || PlayerAnimationSet() == 0x4E ||
                PlayerAnimationSet() == 0x4B || PlayerAnimationSet() == 0x38 || PlayerAnimationSet() == 0x5C
@@ -270,6 +275,14 @@ function EntityAddress(slot) => entity_memory_location + (entity_memory_size * s
 
 // Using X location value for this check since its the value at the base entity address, and the maps are laid out so that a position of 0 would never be inbounds so it should be safe
 function EntityExists(entity_address) => word(entity_address) > 0
+
+// 0x01 if knocked out, otherwise 0x00
+function EntityKnockOutState(entity_address) => byte(entity_address + entity_knock_out_offset)
+
+// Triggers the moment in time an entity is knocked out
+function EntityKnockedOut(entity_address) => prev(EntityKnockOutState(entity_address)) == 0x00 && EntityKnockOutState(entity_address) == 0x01
+
+function EntityAnimationSet(entity_address) => byte(entity_address + entity_animation_set_offset)
 
 function IsEntityAPartner(entity_address) {
     type = byte(entity_address + entity_type_offset)
@@ -447,6 +460,116 @@ achievement(
     id = 354699, badge = "399690", published = "9/9/2023 11:51:09 PM", modified = "9/9/2023 11:51:09 PM",
     trigger = InGame() && never(PlayerHP() == 0x00) && once(PlayerHP() == 0x10) && LevelID() == level_5_1 && StartOfLevel() &&
               ResetIfTimeSpentInLevelExceeds(Seconds(130), level_5_1) && unless(GamePaused() > 0x00) && trigger_when(Level5KeyCollected())
+)
+
+achievement(
+    title = "Holy Humpty Mc-Dumpty", points = 3,
+    description = "Knock out an unaware guard with the pillar trap in Level 6",
+    id = 346234, badge = "391911", published = "8/19/2023 2:17:29 AM", modified = "8/20/2023 7:03:57 PM",
+    trigger = InGame() && never(PlayerHP() == 0x00) && never(LevelID() != level_6) && never(EntityKnockOutState(EntityAddress(2)) == 0x00) &&
+              never(Level6PillarRollingState() == 65426) && never(Level6PillarRollingState() == 65052) && EntityKnockedOut(EntityAddress(2)) &&
+              Level6PillarRollingState() < 65172 && Level6PillarRollingState() > 65132
+)
+
+achievement(
+    title = "The old exploding-bear-trap-in-the-ass trick", points = 3,
+    description = "Knock out a giant cat using a land mine in Level 7",
+    id = 348928, badge = "394278", published = "8/26/2023 10:24:18 PM", modified = "9/9/2023 10:54:22 PM",
+    trigger = InGame() && never(PlayerHP() == 0) && LevelID() == level_7_2 &&
+              ((trigger_when(EntityAnimationSet((EntityAddress(0))) == 0x18)) || (trigger_when(EntityAnimationSet((EntityAddress(1))) == 0x18)))
+)
+
+achievement(
+    title = "I'm good through, well, pretty much the rest of my friggin' life", points = 3,
+    description = "Stay on the conveyor belt without falling off for 3 minutes straight in Level 8",
+    id = 346499, badge = "391957", published = "8/21/2023 1:08:47 AM", modified = "9/9/2023 11:54:39 PM",
+    trigger = InGame() && never(PlayerHP() == 0) && LevelID() == level_8 &&
+              unless(GamePaused() > 0) && never((PlayerXLocation() > 607 || PlayerXLocation() < 571)) && 
+              never((PlayerYLocation() < 743 || PlayerYLocation() > 1139)) && never(PlayerZLocation() > 65498) && 
+              trigger_when(repeated(Seconds(180), LevelID() == level_8))
+)
+
+achievement(
+    title = "You just keep diddling your damn riddle!", points = 2,
+    description = "Solve the door puzzle and then reset it before entering the watchtower in Level 9",
+    id = 355158, badge = "400251", published = "9/11/2023 11:24:09 PM", modified = "9/11/2023 11:24:09 PM",
+    trigger = InGame() && never(LevelID() != level_9_1) && never(PlayerHP() == 0x00) && StartOfLevel() &&
+              trigger_when((prev(Level9PuzzleDoorState()) == 0x04 && Level9PuzzleDoorState() == 0x00))
+)
+
+achievement(
+    title = "The \"Lupin Run\"", points = 4,
+    description = "Begin running down the top slope and don't stop until reaching the very bottom of the level in Level 11",
+    id = 347191, badge = "392530", published = "8/23/2023 12:44:17 AM", modified = "9/9/2023 11:58:56 PM",
+    trigger = InGame() && never(PlayerHP() == 0x00) && never(LevelID() != level_11) &&
+               never((PlayerAnimationSet() != 0x3A && PlayerAnimationSet() != 0x08)) && once(PlayerZLocation() < 64275 &&
+               PlayerAnimationSet() == 0x08) && PlayerZLocation() > 65509
+)
+
+achievement(
+    title = "Either I'm loaded, or the ceiling's getting lower", points = 1,
+    description = "Get knocked out from being crushed by a piston in Level 12",
+    id = 345747, badge = "391909", published = "8/17/2023 2:11:34 AM", modified = "8/26/2023 10:25:52 PM",
+    trigger = InGame() && never(LevelID() != level_12) && never(prior(PlayerHP()) == 0x00) && 
+              PlayerHP() == 0x00 && PlayerAnimationSet() == 0x07
+)
+
+achievement(
+    title = "Allergic to death", points = 3,
+    description = "With 1 HP remaining, heal yourself completely using a gold healing item (excludes Survival Mode)",
+    id = 347600, badge = "393057", published = "8/24/2023 12:33:58 AM", modified = "8/30/2023 2:05:51 AM",
+    trigger = InGame() && once(PlayerHP() == 0x01) && never((PlayerHP() > 0x01 && PlayerHP() < 0x10)) &&
+              (prev(PlayerHeldGoldHealItems()) - PlayerHeldGoldHealItems()) == 0x01
+)
+
+achievement(
+    title = "The problem is, he watches too many damn cartoons", points = 3,
+    description = "Walk across electrified terrain using the rubber boots",
+    id = 354505, badge = "399498", published = "9/9/2023 1:25:43 AM", modified = "9/9/2023 1:25:43 AM",
+    trigger = InGame() && never(PlayerHP() == 0x00) && PlayerRubberBootsFlag() == 0x01 &&
+              PlayerOverElectricFloorFlag() == 0x04 &&
+              ((LevelID() == level_6 && PlayerZLocation() == 65535) ||
+               (LevelID() == level_12 && PlayerZLocation() == 65526) ||
+               (LevelID() == level_13 && PlayerZLocation() == 65455))
+)
+
+achievement(
+    title = "A 10-minute egg must boil for 10 minutes", points = 10,
+    description = "Clear Survival Mode as Goemon in less than 10 minutes on Normal difficulty",
+    id = 346458, badge = "391912", published = "8/20/2023 5:16:30 PM", modified = "9/9/2023 12:56:28 AM",
+    trigger = never(SurvivalModeRound() == 0x00) && never(SurvivalModeTimer() == 0x00) && never(SurvivalModePlayerHealth() == 0x00) && GameDifficulty() == 0x01 &&
+              PlayingAsGoemon() && once(prev(SurvivalModeRound()) == 0x01) && once(prev(SurvivalModeRound()) == 0x26) && 
+              SurvivalModeRound() == 0x27 && SurvivalModeEnemyCount() == 0x00 && SurvivalModeTimer() < 12000
+)
+
+achievement(
+    title = "Those'll kill ya... gimme one", points = 1,
+    description = "Take a 3 minute smoke break",
+    id = 346484, badge = "391944", published = "8/21/2023 12:08:18 AM", modified = "9/9/2023 10:46:49 PM",
+    trigger = InGame() && never(PlayerAnimationSet() != 0x03) && 
+              unless(GamePaused() > 0) && trigger_when(repeated(Seconds(180), PlayerAnimationSet() == 0x03))
+)
+
+achievement(
+    title = "Floating through the air like pixies", points = 1,
+    description = "Avoid falling by swimming through the air",
+    id = 346465, badge = "391908", published = "8/20/2023 6:52:10 PM", modified = "8/22/2023 12:27:08 AM",
+    trigger = InGame() && never((prev(PlayerAnimationSet()) == 86 || prev(PlayerAnimationSet()) == 83 ||
+               prev(PlayerAnimationSet()) == 0x5F || prev(PlayerAnimationSet()) == 0x00)) && once(PlayerAnimationSet() == 0x16) &&
+              ((prev(PlayerAnimationSet()) == 0x11 && (PlayerAnimationSet() == 0x56 || PlayerAnimationSet() == 0x53 || PlayerAnimationSet() == 0x5F || PlayerAnimationSet() == 0x00)) ||
+               (once(PlayerAnimationSet() == 0x11) && once(PlayerAnimationSet() == 0x32) && prev(PlayerAnimationSet()) == 0x33 && 
+                (PlayerAnimationSet() == 0x56 || PlayerAnimationSet() == 0x53 || PlayerAnimationSet() == 0x5F || PlayerAnimationSet() == 0x00)) ||
+               (once(PlayerAnimationSet() == 0x11) && once(PlayerAnimationSet() == 0x35) && prev(PlayerAnimationSet()) == 0x36 && 
+                (PlayerAnimationSet() == 0x56 || PlayerAnimationSet() == 0x53 || PlayerAnimationSet() == 0x5F || PlayerAnimationSet() == 0x00)))
+)
+
+achievement(
+    title = "I always wanted to master the Funky Pharaoh", points = 5,
+    description = "In a single session, dodge enemy attacks a total of 15 times",
+    id = 355176, badge = "400268", published = "9/12/2023 12:23:01 AM", modified = "9/12/2023 12:23:01 AM",
+    trigger = repeated(15, ((((DemoMode() == 0x00 && GameState() == 0x12 && PlayerHP() > 0x00 && prev(PlayerAnimationSet()) == 0x20 &&
+              PlayerAnimationSet() != 0x20) || prev(PlayerAnimationSet()) == 0x21) && PlayerAnimationSet() != 0x21) ||
+              prev(PlayerAnimationSet()) == 0x22) && PlayerAnimationSet() != 0x22)
 )
 
 achievement(
