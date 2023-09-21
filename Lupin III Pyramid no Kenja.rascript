@@ -240,10 +240,15 @@ results_level_15 = 0x0F
 entity_memory_location = 0x1B5A30 // The start of contiguous blocks of entity data (same as Player X Location)
 entity_memory_size = 0x9C
 
+entity_hp_offset = 0x44
+
+entity_state_offset = 0x46
+entity_state_alert = 0x0A
+
 entity_type_offset = 0x47
 entity_animation_set_offset = 0x6E
 entity_knock_out_offset = 0x90
-entity_partner_friendly_fire_counter_offset = 0x92 // If the entity is a partner character, this offset points to a value that increases each time the player damages this partner
+entity_damaged_by_player_count_offset = 0x92 // This offset points to a value that increases each time the player damages this entity, does not increase if the entity is damaged from another source besides the player
 
 all_entity_slots = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18]
 
@@ -284,21 +289,40 @@ function EntityKnockedOut(entity_address) => prev(EntityKnockOutState(entity_add
 
 function EntityAnimationSet(entity_address) => byte(entity_address + entity_animation_set_offset)
 
+function IsEntityAlert(entity_address) {
+    state = byte(entity_address + entity_state_offset)
+    return state == entity_state_alert
+}
+
 function IsEntityAPartner(entity_address) {
     type = byte(entity_address + entity_type_offset)
     return type == 0x0A || type == 0x0B || type == 0x0C || type == 0x0D
 }
 
-function IsPlayerDamagingPartner(partner_address) {
-    damage_counter_address = partner_address + entity_partner_friendly_fire_counter_offset
+function IsPlayerDamagingEntity(entity_address) {
+    damage_counter_address = entity_address + entity_damaged_by_player_count_offset
     return prev(byte(damage_counter_address)) < byte(damage_counter_address)
+}
+
+function IsEntityTakingDamage(entity_address) {
+    hp_address = entity_address + entity_hp_offset
+    return prev(byte(hp_address)) != byte(hp_address) // Not checking less than here, if an entity is knocked out, sometimes the HP value will be set to 0xFF instead of 0x00 for some reason...
 }
 
 function IsPlayerDamagingAnyPartner() {
     condition_met = false
     for slot in all_entity_slots {
         address = EntityAddress(slot)
-        condition_met = condition_met || (EntityExists(address) && IsEntityAPartner(address) && IsPlayerDamagingPartner(address))
+        condition_met = condition_met || (EntityExists(address) && IsEntityAPartner(address) && IsPlayerDamagingEntity(address))
+    }
+    return condition_met
+}
+
+function IsAnyEnemyAlertAndHitWithArrowTrapLevel3() {
+    condition_met = false
+    for slot in all_entity_slots {
+        address = EntityAddress(slot)
+        condition_met = condition_met || (EntityExists(address) && IsEntityAlert(address) && !IsPlayerDamagingEntity(address) && IsEntityTakingDamage(address))
     }
     return condition_met
 }
@@ -441,6 +465,13 @@ achievement(
     description = "Break every pane of glass in Level 2",
     id = 346839, badge = "392203", published = "8/22/2023 2:20:27 AM", modified = "8/22/2023 11:49:44 PM",
     trigger = InGame() && never(PlayerHP() == 0x00) && never(LevelID() != level_2) && Level2AllGlassBroken()
+)
+
+achievement(
+    title = "Ya any good at darts?", points = 4,
+    description = "Alert a guard and then lure them into getting hit with an arrow trap in Level 3",
+    id = 357455, badge = "402676",
+    trigger = InGame() && never(PlayerHP() == 0x00) && never(LevelID() != level_3) && trigger_when(IsAnyEnemyAlertAndHitWithArrowTrapLevel3())
 )
 
 achievement(
