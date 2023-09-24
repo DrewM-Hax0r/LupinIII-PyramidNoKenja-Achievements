@@ -71,7 +71,7 @@ function DemoMode() => byte(0x0000A9)
 //          0x16 = Level 14
 //          0x17 = [Unused] Test Room?
 //          0x18 = Level 15 (Room 1)
-//          0x19 = [Unused] CRASH
+//          0x19 = Level 15 (Transition from Room 1 to Room 2)
 //          0x1a = Level 15 (Room 2)
 //          0x1b = Level 15 (Room 3)
 function LevelID() => byte(0x0000E2)
@@ -91,6 +91,11 @@ function TrasureCollectedLevelFlag() => byte(0x18B2D0)
 
 // $18B2D2: [8-bit] The game is paused if this value is greater than 0x00
 function GamePaused() => byte(0x18B2D2)
+
+// $1913C6: [8-bit] Flash grenade timer - decreases by 1 each game tick, when value reaches 0x00 flash grenade effect wares off
+//          0x00 = Flash grenade not active
+//          0x0e6 = Value set when using a flash grenade item
+function FlashGrenadeTimer() => byte(0x1913C6)
 
 // $1955A1: [8-bit] Current players health (Survival Mode)
 function SurvivalModePlayerHealth() => byte(0x1955A1)
@@ -218,6 +223,7 @@ level_12 = 0x14
 level_13 = 0x15
 level_14 = 0x16
 level_15_1 = 0x18
+level_15_transition = 0x19
 level_15_2 = 0x1A
 level_15_3 = 0x1B
 
@@ -264,6 +270,8 @@ all_entity_slots = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17
 function Seconds(seconds) => seconds * 60
 
 function NotInDemoMode() => never(DemoMode() == 0x01)
+
+function GameDifficultyIs(difficulty) => GameDifficulty() == difficulty
 
 function InGame() => NotInDemoMode() && never(GameState() != 0x12)
 
@@ -326,6 +334,15 @@ function IsPlayerDamagingAnyPartner() {
         condition_met = condition_met || (EntityExists(address) && IsEntityAPartner(address) && IsPlayerDamagingEntity(address))
     }
     return condition_met
+}
+
+function EnemiesKnockedOutInThisFrame() {
+    result = []
+    for slot in all_entity_slots {
+        address = EntityAddress(slot)
+        array_push(result, EntityExists(address) && !IsEntityAPartner(address) && EntityKnockedOut(address))
+    }
+    return result
 }
 
 function IsAnyEnemyKnockedOut() {
@@ -609,6 +626,21 @@ achievement(
     id = 357899, badge = "403121", published = "9/24/2023 3:08:44 AM", modified = "9/24/2023 3:08:44 AM",
     trigger = InGame() && never(LevelID() != level_13) && never(PlayerHP() == 0x00) && never(!IsTreasureCollected()) &&
               never(IsAnyEnemyKnockedOut()) && trigger_when(AreAllEnemiesAlert())
+)
+
+achievement(
+    title = "Don't turn around!", points = 10,
+    description = "Knock out 5 guards after using a single flash grenade before it's effect wears off in Level 14",
+    trigger = InGame() && never(LevelID() != level_14) && never(PlayerHP() == 0x00) && never(FlashGrenadeTimer() == 0x00) &&
+              never(prev(FlashGrenadeTimer()) < FlashGrenadeTimer()) && trigger_when(tally(5, EnemiesKnockedOutInThisFrame()))
+)
+
+achievement(
+    title = "I bet they don't have problems with drunk drivers around here", points = 10,
+    description = "Play on Hyper difficulty and reach the control room after crossing the moving bridge in Level 15",
+    id = 358195, badge = "403422",
+    trigger = InGame() && never(LevelID() != level_15_1 && LevelID() != level_15_transition && LevelID() != level_15_2) && GameDifficultyIs(hyper_difficulty) &&
+              once(LevelID() == level_15_1) && trigger_when(LevelID() == level_15_2)
 )
 
 achievement(
