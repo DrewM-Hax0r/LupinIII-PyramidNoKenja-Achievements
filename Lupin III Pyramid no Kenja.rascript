@@ -87,7 +87,7 @@ function SurvivalModeTimer() => word(0x1865AA)
 
 // $18B2D0: [8-bit] Flag for collecting the key to the temple in Level 5
 function Level5KeyFlag() => byte(0x18B2D0)
-function TrasureCollectedLevel10Flag() => byte(0x18B2D0)
+function TrasureCollectedLevelFlag() => byte(0x18B2D0)
 
 // $18B2D2: [8-bit] The game is paused if this value is greater than 0x00
 function GamePaused() => byte(0x18B2D2)
@@ -269,6 +269,8 @@ function InGame() => NotInDemoMode() && never(GameState() != 0x12)
 
 function InMenus() => GameState() == 0x00
 
+function IsTreasureCollected() => TrasureCollectedLevelFlag() == 0x03
+
 function ClearedLevel(min_difficulty, level_id, results_level_id) => NotInDemoMode() && never(PlayerHP() == 0x00) && never(GameDifficulty() < min_difficulty) &&
               once(LevelID() == level_id) && InMenus() && prev(GameState()) == 0x12 && ResultsScreenLevelID() == results_level_id
 
@@ -326,6 +328,25 @@ function IsPlayerDamagingAnyPartner() {
     return condition_met
 }
 
+function IsAnyEnemyKnockedOut() {
+    condition_met = false
+    for slot in all_entity_slots {
+        address = EntityAddress(slot)
+        condition_met = condition_met || (EntityExists(address) && !IsEntityAPartner(address) && EntityKnockOutState(address) == 0x01)
+    }
+    return condition_met
+}
+
+function AreAllEnemiesAlert() {
+    condition_met = true
+    for slot in all_entity_slots {
+        address = EntityAddress(slot)
+        valid_to_check = EntityExists(address) && !IsEntityAPartner(address)
+        condition_met = condition_met && (!valid_to_check || (valid_to_check && IsEntityAlert(address)))
+    }
+    return condition_met
+}
+
 function IsAnyEnemyAlertAndHitWithArrowTrapLevel3() {
     condition_met = false
     for slot in all_entity_slots {
@@ -351,7 +372,7 @@ function AreAllTreasureRoomEnemiesInWaterLevel10() {
         address = EntityAddress(slot)
         // Including X position out-of-bounds check in this condition... this level seems to have an unused enemy placed out of bounds?!?!?!!?
         valid_to_check = EntityExists(address) && EntityXLocation(address) < 0x0256 && !IsEntityAPartner(address) && EntityState(address) != entity_state_suspended
-        condition_met = condition_met && once(LevelID() == level_10_2 && TrasureCollectedLevel10Flag() == 0x03 && (!valid_to_check || (valid_to_check && EntityZLocation(address) == 0x012B)))
+        condition_met = condition_met && once(LevelID() == level_10_2 && IsTreasureCollected() && (!valid_to_check || (valid_to_check && EntityZLocation(address) == 0x012B)))
     }
     return condition_met
 }
@@ -579,6 +600,13 @@ achievement(
     id = 345747, badge = "391909", published = "8/17/2023 2:11:34 AM", modified = "8/26/2023 10:25:52 PM",
     trigger = InGame() && never(LevelID() != level_12) && never(prior(PlayerHP()) == 0x00) && 
               PlayerHP() == 0x00 && PlayerAnimationSet() == 0x07
+)
+
+achievement(
+    title = "He thrives on chaos!", points = 10,
+    description = "Have every single guard in an alert state at the same time after collecting the treasure in Level 13",
+    trigger = InGame() && never(LevelID() != level_13) && never(PlayerHP() == 0x00) && never(!IsTreasureCollected()) &&
+              never(IsAnyEnemyKnockedOut()) && trigger_when(AreAllEnemiesAlert())
 )
 
 achievement(
