@@ -400,105 +400,105 @@ function ResetIfTimeSpentInLevelExceeds(frame_time, level_id) => never(repeated(
 achievement(
     title = "The Return of Lupin the Third", points = 1,
     description = "Clear Level 1: Pyramid Entrance on Normal difficulty or higher",
-    id = 350710, badge = "395420", published = "8/30/2023 1:49:07 AM", modified = "8/30/2023 1:49:07 AM",
+    id = 350710, badge = "395420", published = "8/30/2023 1:49:07 AM", modified = "9/16/2023 8:18:20 PM",
     trigger = ClearedLevel(normal_difficulty, level_1, results_level_1)
 )
 
 achievement(
     title = "So this is where Dick Clark lives", points = 1,
     description = "Clear Level 2: Underground Fortress on Normal difficulty or higher",
-    id = 353504, badge = "398245", published = "9/4/2023 10:13:00 PM", modified = "9/4/2023 10:13:00 PM",
+    id = 353504, badge = "398245", published = "9/4/2023 10:13:00 PM", modified = "9/16/2023 8:18:20 PM",
     trigger = ClearedLevel(normal_difficulty, level_2, results_level_2)
 )
 
 achievement(
     title = "The friggin' grave robbers here had it made", points = 1,
     description = "Clear Level 3: Desert Tower on Normal difficulty or higher",
-    id = 350711, badge = "395421", published = "8/30/2023 1:54:57 AM", modified = "8/30/2023 1:54:57 AM",
+    id = 350711, badge = "395421", published = "8/30/2023 1:54:57 AM", modified = "9/16/2023 8:18:21 PM",
     trigger = ClearedLevel(normal_difficulty, level_3, results_level_3)
 )
 
 achievement(
     title = "What, are you gonna climb Mt. Everest or something?", points = 2,
     description = "Clear Level 4: Mountain Fortress on Normal difficulty or higher",
-    id = 353858, badge = "398628", published = "9/6/2023 1:58:13 AM", modified = "9/9/2023 3:12:58 AM",
+    id = 353858, badge = "398628", published = "9/6/2023 1:58:13 AM", modified = "9/16/2023 8:18:21 PM",
     trigger = ClearedLevel(normal_difficulty, level_4_1, results_level_4)
 )
 
 achievement(
     title = "Do they replace all those pillars every time someone comes here?", points = 2,
     description = "Clear Level 5: Ancient Ruins on Normal difficulty or higher",
-    id = 353859, badge = "398629", published = "9/6/2023 2:06:51 AM", modified = "9/9/2023 3:12:58 AM",
+    id = 353859, badge = "398629", published = "9/6/2023 2:06:51 AM", modified = "9/16/2023 8:18:21 PM",
     trigger = ClearedLevel(normal_difficulty, level_5_1, results_level_5)
 )
 
 achievement(
     title = "I'd actually rather be in Disneyland", points = 2,
     description = "Clear Level 6: Valley Fortress on Normal difficulty or higher",
-    id = 353860, badge = "398630", published = "9/6/2023 2:12:46 AM", modified = "9/6/2023 2:12:46 AM",
+    id = 353860, badge = "398630", published = "9/6/2023 2:12:46 AM", modified = "9/16/2023 8:18:22 PM",
     trigger = ClearedLevel(normal_difficulty, level_6, results_level_6)
 )
 
 achievement(
     title = "It's time for a round of big bang boomerang", points = 3,
     description = "Clear Level 7: Jungle Temple on Normal difficulty or higher",
-    id = 354172, badge = "399086", published = "9/8/2023 12:23:30 AM", modified = "9/9/2023 10:50:05 PM",
+    id = 354172, badge = "399086", published = "9/8/2023 12:23:30 AM", modified = "9/16/2023 8:18:22 PM",
     trigger = ClearedLevel(normal_difficulty, level_7_1, results_level_7)
 )
 
 achievement(
     title = "I think the jungle's getting to him", points = 3,
     description = "Clear Level 8: Botanical Research Institute on Normal difficulty or higher",
-    id = 354173, badge = "399087", published = "9/8/2023 12:29:33 AM", modified = "9/8/2023 12:29:33 AM",
+    id = 354173, badge = "399087", published = "9/8/2023 12:29:33 AM", modified = "9/16/2023 8:18:22 PM",
     trigger = ClearedLevel(normal_difficulty, level_8, results_level_8)
 )
 
 achievement(
     title = "Dammit, this is very mysterious, and I hate mysteries!", points = 3,
     description = "Clear Level 9: Jungle Watchtower on Normal difficulty or higher",
-    id = 354175, badge = "399089", published = "9/8/2023 1:25:54 AM", modified = "9/9/2023 3:12:58 AM",
+    id = 354175, badge = "399089", published = "9/8/2023 1:25:54 AM", modified = "9/16/2023 8:18:23 PM",
     trigger = ClearedLevel(normal_difficulty, level_9_2, results_level_9)
 )
 
 achievement(
     title = "Better not be those 3 hour tours you hear about on Nick at Night", points = 4,
     description = "Clear Level 10: Artificial Island on Normal difficulty or higher",
-    id = 354497, badge = "399421", published = "9/9/2023 12:16:05 AM", modified = "9/11/2023 10:50:15 PM",
+    id = 354497, badge = "399421", published = "9/9/2023 12:16:05 AM", modified = "9/16/2023 8:18:23 PM",
     trigger = ClearedLevel(normal_difficulty, level_10_1, results_level_10)
 )
 
 achievement(
     title = "Breaking in? I prefer to call it \"dropping by\"", points = 4,
     description = "Clear Level 11: Water Quality Control Center on Normal difficulty or higher",
-    id = 354498, badge = "399422", published = "9/9/2023 12:33:16 AM", modified = "9/9/2023 12:33:16 AM",
+    id = 354498, badge = "399422", published = "9/9/2023 12:33:16 AM", modified = "9/16/2023 8:18:23 PM",
     trigger = ClearedLevel(normal_difficulty, level_11, results_level_11)
 )
 
 achievement(
     title = "This'd be really homey if I were a spider or a corpse", points = 4,
     description = "Clear Level 12: Undersea Base on Normal difficulty or higher",
-    id = 354499, badge = "399492", published = "9/9/2023 12:48:44 AM", modified = "9/9/2023 12:48:44 AM",
+    id = 354499, badge = "399492", published = "9/9/2023 12:48:44 AM", modified = "9/16/2023 8:18:23 PM",
     trigger = ClearedLevel(normal_difficulty, level_12, results_level_12)
 )
 
 achievement(
     title = "Don't blame yourselves, the vault's all mine!", points = 5,
     description = "Clear Level 13: Genetics Laboratory on Normal difficulty or higher",
-    id = 354503, badge = "399496", published = "9/9/2023 1:20:28 AM", modified = "9/9/2023 1:20:28 AM",
+    id = 354503, badge = "399496", published = "9/9/2023 1:20:28 AM", modified = "9/16/2023 8:18:24 PM",
     trigger = ClearedLevel(normal_difficulty, level_13, results_level_13)
 )
 
 achievement(
     title = "They're like damn cockroaches!", points = 5,
     description = "Clear Level 14: Power Reactor on Normal difficulty or higher",
-    id = 345652, badge = "391910", published = "8/16/2023 1:32:24 AM", modified = "8/30/2023 1:49:46 AM",
+    id = 345652, badge = "391910", published = "8/16/2023 1:32:24 AM", modified = "9/16/2023 8:18:24 PM",
     trigger = ClearedLevel(normal_difficulty, level_14, results_level_14)
 )
 
 achievement(
     title = "King Lupin the Third", points = 25,
     description = "Clear Level 15: Power Center on Normal difficulty or higher and successfully steal the pink diamond",
-    id = 354509, badge = "399548", published = "9/9/2023 3:10:45 AM", modified = "9/9/2023 3:10:45 AM",
+    id = 354509, badge = "399548", published = "9/9/2023 3:10:45 AM", modified = "9/16/2023 8:18:24 PM",
     trigger = ClearedLevel(normal_difficulty, level_15_3, results_level_15)
 )
 
@@ -520,7 +520,7 @@ achievement(
 achievement(
     title = "Ya any good at darts?", points = 4,
     description = "Alert a guard and then lure them into getting hit with an arrow trap in Level 3",
-    id = 357455, badge = "402676",
+    id = 357455, badge = "402676", published = "9/21/2023 10:54:01 PM", modified = "9/21/2023 10:54:01 PM",
     trigger = InGame() && never(PlayerHP() == 0x00) && never(LevelID() != level_3) && trigger_when(IsAnyEnemyAlertAndHitWithArrowTrapLevel3())
 )
 
@@ -546,7 +546,7 @@ achievement(
 achievement(
     title = "Holy Humpty Mc-Dumpty", points = 3,
     description = "Knock out an unaware guard with the pillar trap in Level 6",
-    id = 346234, badge = "391911", published = "8/19/2023 2:17:29 AM", modified = "8/20/2023 7:03:57 PM",
+    id = 346234, badge = "391911", published = "8/19/2023 2:17:29 AM", modified = "9/19/2023 10:25:38 PM",
     trigger = InGame() && never(PlayerHP() == 0x00) && never(LevelID() != level_6) && never(EntityKnockOutState(EntityAddress(2)) == 0x00) &&
               never(Level6PillarRollingState() == 65426) && never(Level6PillarRollingState() == 65052) && EntityKnockedOut(EntityAddress(2)) &&
               Level6PillarRollingState() < 65172 && Level6PillarRollingState() > 65132
@@ -555,7 +555,7 @@ achievement(
 achievement(
     title = "The old exploding-bear-trap-in-the-ass trick", points = 3,
     description = "Knock out a giant cat using a land mine in Level 7",
-    id = 348928, badge = "394278", published = "8/26/2023 10:24:18 PM", modified = "9/9/2023 10:54:22 PM",
+    id = 348928, badge = "394278", published = "8/26/2023 10:24:18 PM", modified = "9/19/2023 10:35:32 PM",
     trigger = InGame() && never(PlayerHP() == 0) && LevelID() == level_7_2 &&
               ((trigger_when(EntityAnimationSet((EntityAddress(0))) == 0x18)) || (trigger_when(EntityAnimationSet((EntityAddress(1))) == 0x18)))
 )
@@ -573,7 +573,7 @@ achievement(
 achievement(
     title = "You just keep diddling your damn riddle!", points = 2,
     description = "Solve the door puzzle and then reset it before entering the watchtower in Level 9",
-    id = 355158, badge = "400251", published = "9/11/2023 11:24:09 PM", modified = "9/11/2023 11:24:09 PM",
+    id = 355158, badge = "400251", published = "9/11/2023 11:24:09 PM", modified = "9/19/2023 10:45:12 PM",
     trigger = InGame() && never(LevelID() != level_9_1) && never(PlayerHP() == 0x00) && StartOfLevel() &&
               trigger_when((prev(Level9PuzzleDoorState()) == 0x04 && Level9PuzzleDoorState() == 0x00))
 )
@@ -581,6 +581,7 @@ achievement(
 achievement(
     title = "Eins!  Zwei!  Drei!  ...And whatever the hell four is in German!", points = 10,
     description = "Drop all guards into the water in a single run of the level in Level 10",
+    id = 357897, badge = "403119", published = "9/24/2023 2:11:50 AM", modified = "9/24/2023 2:13:29 AM",
     trigger = InGame() && never(LevelID() != level_10_1 && LevelID() != level_10_2) && never(PlayerHP() == 0x00) &&
               trigger_when(AreAllTreasureRoomEnemiesInWaterLevel10() && AreAllMainAreaEnemiesInWaterLevel10())
 )
@@ -605,6 +606,7 @@ achievement(
 achievement(
     title = "He thrives on chaos!", points = 10,
     description = "Have every single guard in an alert state at the same time after collecting the treasure in Level 13",
+    id = 357899, badge = "403121", published = "9/24/2023 3:08:44 AM", modified = "9/24/2023 3:08:44 AM",
     trigger = InGame() && never(LevelID() != level_13) && never(PlayerHP() == 0x00) && never(!IsTreasureCollected()) &&
               never(IsAnyEnemyKnockedOut()) && trigger_when(AreAllEnemiesAlert())
 )
@@ -620,7 +622,7 @@ achievement(
 achievement(
     title = "The problem is, he watches too many damn cartoons", points = 3,
     description = "Walk across electrified terrain using the rubber boots",
-    id = 354505, badge = "399498", published = "9/9/2023 1:25:43 AM", modified = "9/9/2023 1:25:43 AM",
+    id = 354505, badge = "399498", published = "9/9/2023 1:25:43 AM", modified = "9/19/2023 10:55:52 PM",
     trigger = InGame() && never(PlayerHP() == 0x00) && PlayerRubberBootsFlag() == 0x01 &&
               PlayerOverElectricFloorFlag() == 0x04 &&
               ((LevelID() == level_6 && PlayerZLocation() == 65535) ||
@@ -648,7 +650,7 @@ achievement(
 achievement(
     title = "Floating through the air like pixies", points = 1,
     description = "Avoid falling by swimming through the air",
-    id = 346465, badge = "391908", published = "8/20/2023 6:52:10 PM", modified = "8/22/2023 12:27:08 AM",
+    id = 346465, badge = "391908", published = "8/20/2023 6:52:10 PM", modified = "9/19/2023 11:10:34 PM",
     trigger = InGame() && never((prev(PlayerAnimationSet()) == 86 || prev(PlayerAnimationSet()) == 83 ||
                prev(PlayerAnimationSet()) == 0x5F || prev(PlayerAnimationSet()) == 0x00)) && once(PlayerAnimationSet() == 0x16) &&
               ((prev(PlayerAnimationSet()) == 0x11 && (PlayerAnimationSet() == 0x56 || PlayerAnimationSet() == 0x53 || PlayerAnimationSet() == 0x5F || PlayerAnimationSet() == 0x00)) ||
