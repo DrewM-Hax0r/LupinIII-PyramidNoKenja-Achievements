@@ -87,6 +87,7 @@ function SurvivalModeTimer() => word(0x1865AA)
 
 // $18B2D0: [8-bit] Flag for collecting the key to the temple in Level 5
 function Level5KeyFlag() => byte(0x18B2D0)
+function TrasureCollectedLevel10Flag() => byte(0x18B2D0)
 
 // $18B2D2: [8-bit] The game is paused if this value is greater than 0x00
 function GamePaused() => byte(0x18B2D2)
@@ -240,9 +241,12 @@ results_level_15 = 0x0F
 entity_memory_location = 0x1B5A30 // The start of contiguous blocks of entity data (same as Player X Location)
 entity_memory_size = 0x9C
 
+entity_z_location_offset = 0x08
+
 entity_hp_offset = 0x44
 
 entity_state_offset = 0x46
+entity_state_suspended = 0x01
 entity_state_alert = 0x0A
 
 entity_type_offset = 0x47
@@ -281,6 +285,9 @@ function EntityAddress(slot) => entity_memory_location + (entity_memory_size * s
 // Using X location value for this check since its the value at the base entity address, and the maps are laid out so that a position of 0 would never be inbounds so it should be safe
 function EntityExists(entity_address) => word(entity_address) > 0
 
+function EntityXLocation(entity_address) => word(entity_address)
+function EntityZLocation(entity_address) => word(entity_address + entity_z_location_offset)
+
 // 0x01 if knocked out, otherwise 0x00
 function EntityKnockOutState(entity_address) => byte(entity_address + entity_knock_out_offset)
 
@@ -289,9 +296,10 @@ function EntityKnockedOut(entity_address) => prev(EntityKnockOutState(entity_add
 
 function EntityAnimationSet(entity_address) => byte(entity_address + entity_animation_set_offset)
 
+function EntityState(entity_address) => byte(entity_address + entity_state_offset)
+
 function IsEntityAlert(entity_address) {
-    state = byte(entity_address + entity_state_offset)
-    return state == entity_state_alert
+    return EntityState(entity_address) == entity_state_alert
 }
 
 function IsEntityAPartner(entity_address) {
@@ -323,6 +331,27 @@ function IsAnyEnemyAlertAndHitWithArrowTrapLevel3() {
     for slot in all_entity_slots {
         address = EntityAddress(slot)
         condition_met = condition_met || (EntityExists(address) && IsEntityAlert(address) && !IsPlayerDamagingEntity(address) && IsEntityTakingDamage(address))
+    }
+    return condition_met
+}
+
+function AreAllMainAreaEnemiesInWaterLevel10() {
+    condition_met = LevelID() == level_10_1
+    for slot in all_entity_slots {
+        address = EntityAddress(slot)
+        valid_to_check = EntityExists(address) && !IsEntityAPartner(address)
+        condition_met = condition_met && (!valid_to_check || (valid_to_check && EntityZLocation(address) == 0x012B))
+    }
+    return condition_met
+}
+
+function AreAllTreasureRoomEnemiesInWaterLevel10() {
+    condition_met = true
+    for slot in all_entity_slots {
+        address = EntityAddress(slot)
+        // Including X position out-of-bounds check in this condition... this level seems to have an unused enemy placed out of bounds?!?!?!!?
+        valid_to_check = EntityExists(address) && EntityXLocation(address) < 0x0256 && !IsEntityAPartner(address) && EntityState(address) != entity_state_suspended
+        condition_met = condition_met && once(LevelID() == level_10_2 && TrasureCollectedLevel10Flag() == 0x03 && (!valid_to_check || (valid_to_check && EntityZLocation(address) == 0x012B)))
     }
     return condition_met
 }
@@ -526,6 +555,13 @@ achievement(
     id = 355158, badge = "400251", published = "9/11/2023 11:24:09 PM", modified = "9/11/2023 11:24:09 PM",
     trigger = InGame() && never(LevelID() != level_9_1) && never(PlayerHP() == 0x00) && StartOfLevel() &&
               trigger_when((prev(Level9PuzzleDoorState()) == 0x04 && Level9PuzzleDoorState() == 0x00))
+)
+
+achievement(
+    title = "Eins!  Zwei!  Drei!  ...And whatever the hell four is in German!", points = 10,
+    description = "Drop all guards into the water in a single run of the level in Level 10",
+    trigger = InGame() && never(LevelID() != level_10_1 && LevelID() != level_10_2) && never(PlayerHP() == 0x00) &&
+              trigger_when(AreAllTreasureRoomEnemiesInWaterLevel10() && AreAllMainAreaEnemiesInWaterLevel10())
 )
 
 achievement(
