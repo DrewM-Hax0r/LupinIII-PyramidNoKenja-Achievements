@@ -174,6 +174,13 @@ function PlayerYLocation() => word(0x1AEBC4)
 //          0x2c = Recovery (5-hit combo)
 //          0x4b = Sprint Charge Attack
 //          0x38 = Sprint Slide Attack
+//
+//          0x42 = Gun Fire (Lupin)
+//          0x43 = Gun Finished Firing (Lupin)
+//          0x54 = Gun Fire (Jigen)
+//          0x61 = Gun Dive Fire (Lupin, Jigen)
+//          0x51 = Zantetsuken Attack (Goemon)
+//          0x5a = Zantetsuken Running Attack (Goemon)
 function PlayerAnimationSet() => byte(0x1AEBD6)
 
 // $1AEBE4: [8-bit] Can be used to determine if the character is positioned over an electric floor (ignores Z location)
@@ -256,11 +263,17 @@ entity_state_suspended = 0x01
 entity_state_alert = 0x0A
 
 entity_type_offset = 0x47
+entity_knock_out_offset = 0x6B
 entity_animation_set_offset = 0x6E
-entity_knock_out_offset = 0x90
 entity_damaged_by_player_count_offset = 0x92 // This offset points to a value that increases each time the player damages this entity, does not increase if the entity is damaged from another source besides the player
 
 all_entity_slots = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18]
+
+animation_gun_lupin = 0x42
+animation_gun_jigen = 0x54
+animation_gun_dive = 0x61
+animation_zantetsuken_goemon = 0x51
+animation_zantetsuken_running_goemon = 0x5A
 
 // -----------------------
 // --- Logic Functions ---
@@ -283,7 +296,7 @@ function ClearedLevel(min_difficulty, level_id, results_level_id) => NotInDemoMo
               once(LevelID() == level_id) && InMenus() && prev(GameState()) == 0x12 && ResultsScreenLevelID() == results_level_id
 
 function PlayingAsLupin() => PlayerCostume() == 0x00 || PlayerCostume() == 0x01 || PlayerCostume() == 0x02 || PlayerCostume() == 0x07
-
+function PlayingAsJigen() => PlayerCostume() == 0x03
 function PlayingAsGoemon() => PlayerCostume() == 0x04
 
 function PlayerIsPunching() => PlayerAnimationSet() == 0x2E || PlayerAnimationSet() == 0x2F ||
@@ -341,6 +354,24 @@ function EnemiesKnockedOutInThisFrame() {
     for slot in all_entity_slots {
         address = EntityAddress(slot)
         array_push(result, EntityExists(address) && !IsEntityAPartner(address) && EntityKnockedOut(address))
+    }
+    return result
+}
+
+function EnemiesKnockedOutInThisFrameByGun(attack_animation) {
+    result = []
+    for slot in all_entity_slots {
+        address = EntityAddress(slot)
+        array_push(result, EntityExists(address) && !IsEntityAPartner(address) && IsPlayerDamagingEntity(address) && EntityKnockedOut(address) && (PlayerAnimationSet() == attack_animation || PlayerAnimationSet() == animation_gun_dive))
+    }
+    return result
+}
+
+function EnemiesKnockedOutInThisFrameByZantetsuken() {
+    result = []
+    for slot in all_entity_slots {
+        address = EntityAddress(slot)
+        array_push(result, EntityExists(address) && !IsEntityAPartner(address) && IsPlayerDamagingEntity(address) && EntityKnockedOut(address) && (PlayerAnimationSet() == animation_zantetsuken_goemon || PlayerAnimationSet() == animation_zantetsuken_running_goemon))
     }
     return result
 }
@@ -631,6 +662,7 @@ achievement(
 achievement(
     title = "Don't turn around!", points = 10,
     description = "Knock out 5 guards after using a single flash grenade before it's effect wears off in Level 14",
+    id = 358173, badge = "403382",
     trigger = InGame() && never(LevelID() != level_14) && never(PlayerHP() == 0x00) && never(FlashGrenadeTimer() == 0x00) &&
               never(prev(FlashGrenadeTimer()) < FlashGrenadeTimer()) && trigger_when(tally(5, EnemiesKnockedOutInThisFrame()))
 )
@@ -641,6 +673,27 @@ achievement(
     id = 358195, badge = "403422",
     trigger = InGame() && never(LevelID() != level_15_1 && LevelID() != level_15_transition && LevelID() != level_15_2) && GameDifficultyIs(hyper_difficulty) &&
               once(LevelID() == level_15_1) && trigger_when(LevelID() == level_15_2)
+)
+
+achievement(
+    title = "And not just shot, but shot!  And then shot a couple more times!", points = 5,
+    description = "In a single session, play as Lupin and knock out a total of 15 enemies with gunshots from his Walther P38 (excludes Survival Mode)",
+    id = 358249, badge = "403580",
+    trigger = InGame() && PlayingAsLupin() && measured(tally(15, EnemiesKnockedOutInThisFrameByGun(animation_gun_lupin)), PlayingAsLupin(), "raw")
+)
+
+achievement(
+    title = "Show's over, eat lead", points = 5,
+    description = "In a single session, play as Jigen and knock out a total of 15 enemies with gunshots from his revolver (excludes Survival Mode)",
+    id = 358251, badge = "403582",
+    trigger = InGame() && PlayingAsJigen() && measured(tally(15, EnemiesKnockedOutInThisFrameByGun(animation_gun_jigen)), PlayingAsJigen() || PlayerCostume() == 0x10, "raw")
+)
+
+achievement(
+    title = "Once again, I've cut another worthless object", points = 5,
+    description = "In a single session, play as Goemon and knock out a total of 15 enemies with the Zantetsuken's blade (excludes Survival Mode)",
+    id = 359063, badge = "404479",
+    trigger = InGame() && PlayingAsGoemon() && measured(tally(15, EnemiesKnockedOutInThisFrameByZantetsuken()), PlayingAsGoemon() || PlayerCostume() == 0x10, "raw")
 )
 
 achievement(
@@ -696,9 +749,9 @@ achievement(
     title = "I always wanted to master the Funky Pharaoh", points = 5,
     description = "In a single session, dodge enemy attacks a total of 15 times",
     id = 355176, badge = "400268", published = "9/12/2023 12:23:01 AM", modified = "9/12/2023 12:23:01 AM",
-    trigger = repeated(15, ((((DemoMode() == 0x00 && GameState() == 0x12 && PlayerHP() > 0x00 && prev(PlayerAnimationSet()) == 0x20 &&
+    trigger = measured(repeated(15, ((((DemoMode() == 0x00 && GameState() == 0x12 && PlayerHP() > 0x00 && prev(PlayerAnimationSet()) == 0x20 &&
               PlayerAnimationSet() != 0x20) || prev(PlayerAnimationSet()) == 0x21) && PlayerAnimationSet() != 0x21) ||
-              prev(PlayerAnimationSet()) == 0x22) && PlayerAnimationSet() != 0x22)
+              prev(PlayerAnimationSet()) == 0x22) && PlayerAnimationSet() != 0x22), always_true(), "raw")
 )
 
 achievement(
