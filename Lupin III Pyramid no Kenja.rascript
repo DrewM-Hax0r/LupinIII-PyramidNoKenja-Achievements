@@ -22,6 +22,13 @@ function GameDifficulty() => byte(0x000012)
 //          0x09 = Princess (not accessible normally, might be a secret unlockable?)
 function PlayerCostume() => byte(0x000014)
 
+// $00001E: [8-bit] Progression Flag
+//          0x01 = At title screen
+//          0x02 = Start New Game
+//          0x03 = Level 1 Cleared, Levels 2,3 unlocked
+//          0x04 = Levels 2,3 Cleared, Levels 4,5,6 unlocked
+function ProgressionFlag() => byte(0x00001E)
+
 // $0000A1: [8-bit] The level ID on the level results screen
 //          0x01 = Level 1 (Pyramid Entrance)
 //          0x02 = Level 2 (Underground Fortress)
@@ -81,6 +88,20 @@ function LevelID() => byte(0x0000E2)
 //          0x01 = Viewing level results screen from Treasure Room
 //          0x12 = In Game
 function GameState() => byte(0x13E502)
+
+// $13E509: [8-bit] Current Menu Screen
+//          0x01 = Load Screen (only when accessed from the Title Screen)
+//          0x02 = Stage Select
+//          0x03 = Options Screen
+//          0x06 = Main Menu (Next Stage, Save, Load, etc)
+//          0x07 = Save Screen
+//          0x08 = Load Screen (only when accessed from the Main Menu)
+//          0x0a = Treasure Room
+function CurrentMenuScreen() => byte(0x13E509)
+
+// $1452C2: [8-bit] Load/Save Trigger Flag
+//          Changes from 0x00 to 0x01 when a file is loaded, or saved
+function LoadSaveTriggerFlag() => byte(0x1452C2)
 
 // $1865AA: [16-bit] Survival mode timer
 function SurvivalModeTimer() => word(0x1865AA)
@@ -286,9 +307,13 @@ function NotInDemoMode() => never(DemoMode() == 0x01)
 
 function GameDifficultyIs(difficulty) => GameDifficulty() == difficulty
 
+function StartedNewGame() => prev(ProgressionFlag()) == 0x01 && ProgressionFlag() == 0x02
+
 function InGame() => NotInDemoMode() && never(GameState() != 0x12)
 
 function InMenus() => GameState() == 0x00
+
+function ResetIfGameSaveIsLoaded() => never(GameState() == 0x00 && CurrentMenuScreen() == 0x08 && prev(LoadSaveTriggerFlag()) == 0x00 && LoadSaveTriggerFlag() == 0x01)
 
 function IsTreasureCollected() => TrasureCollectedLevelFlag() == 0x03
 
@@ -437,6 +462,8 @@ function Level5KeyCollected() => once(once(prev(Level5KeyFlag()) == 0x00) && Lev
 
 // Once the player has gone higher up than the provided activate_at position, the achivement will reset if the player ever drops below the provided reset_threshold position
 function OneWayZPositionCheckpointPassed(activate_at, reset_threshold) => never((once(PlayerZLocation() <= activate_at) && PlayerZLocation() >= reset_threshold))
+
+function ResetIfTimeExceeds(frame_time) => never(repeated(frame_time, ProgressionFlag() > 0x01))
 
 function ResetIfTimeSpentInLevelExceeds(frame_time, level_id) => never(repeated(frame_time, LevelID() == level_id))
 
@@ -725,6 +752,13 @@ achievement(
 )
 
 achievement(
+    title = "Exceeding the speed limit", points = 50,
+    description = "Begin a New Game and complete a single-segment speedrun in under 1 hour",
+    trigger = once(StartedNewGame()) && ResetIfTimeExceeds(Seconds(3600)) && ResetIfGameSaveIsLoaded() &&
+              trigger_when(ClearedLevel(easy_difficulty, level_15_3, results_level_15))
+)
+
+achievement(
     title = "Those'll kill ya... gimme one", points = 1,
     description = "Take a 3 minute smoke break",
     id = 346484, badge = "391944", published = "8/21/2023 12:08:18 AM", modified = "9/9/2023 10:46:49 PM",
@@ -748,7 +782,7 @@ achievement(
 achievement(
     title = "I always wanted to master the Funky Pharaoh", points = 5,
     description = "In a single session, dodge enemy attacks a total of 15 times",
-    id = 355176, badge = "400268", published = "9/12/2023 12:23:01 AM", modified = "9/12/2023 12:23:01 AM",
+    id = 355176, badge = "404483", published = "9/12/2023 12:23:01 AM", modified = "9/12/2023 12:23:01 AM",
     trigger = measured(repeated(15, ((((DemoMode() == 0x00 && GameState() == 0x12 && PlayerHP() > 0x00 && prev(PlayerAnimationSet()) == 0x20 &&
               PlayerAnimationSet() != 0x20) || prev(PlayerAnimationSet()) == 0x21) && PlayerAnimationSet() != 0x21) ||
               prev(PlayerAnimationSet()) == 0x22) && PlayerAnimationSet() != 0x22), always_true(), "raw")
