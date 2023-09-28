@@ -284,7 +284,7 @@ entity_state_suspended = 0x01
 entity_state_alert = 0x0A
 
 entity_type_offset = 0x47
-entity_knock_out_offset = 0x6B
+entity_knock_out_by_player_offset = 0x6B
 entity_animation_set_offset = 0x6E
 entity_damaged_by_player_count_offset = 0x92 // This offset points to a value that increases each time the player damages this entity, does not increase if the entity is damaged from another source besides the player
 
@@ -337,10 +337,10 @@ function EntityXLocation(entity_address) => word(entity_address)
 function EntityZLocation(entity_address) => word(entity_address + entity_z_location_offset)
 
 // 0x01 if knocked out, otherwise 0x00
-function EntityKnockOutState(entity_address) => byte(entity_address + entity_knock_out_offset)
+function EntityKnockOutByPlayerState(entity_address) => byte(entity_address + entity_knock_out_by_player_offset)
 
-// Triggers the moment in time an entity is knocked out
-function EntityKnockedOut(entity_address) => prev(EntityKnockOutState(entity_address)) == 0x00 && EntityKnockOutState(entity_address) == 0x01
+// Triggers the moment in time an entity is knocked out by the player
+function EntityKnockedOutByPlayer(entity_address) => prev(EntityKnockOutByPlayerState(entity_address)) == 0x00 && EntityKnockOutByPlayerState(entity_address) == 0x01
 
 function EntityAnimationSet(entity_address) => byte(entity_address + entity_animation_set_offset)
 
@@ -360,9 +360,19 @@ function IsPlayerDamagingEntity(entity_address) {
     return prev(byte(damage_counter_address)) < byte(damage_counter_address)
 }
 
-function IsEntityTakingDamage(entity_address) {
+function IsEntityHealthDepleted(entity_address) {
     hp_address = entity_address + entity_hp_offset
-    return prev(byte(hp_address)) != byte(hp_address) // Not checking less than here, if an entity is knocked out, sometimes the HP value will be set to 0xFF instead of 0x00 for some reason...
+    current_hp = byte(hp_address)
+    // Accounting for some overflow that happens sometimes when enemy HP drops below 0
+    return !(current_hp > 0x00 && current_hp < 0xF9)
+}
+
+function IsEntityHealthDepletedOnThisFrame(entity_address) {
+    hp_address = entity_address + entity_hp_offset
+    current_hp = byte(hp_address)
+    prev_hp = prev(byte(hp_address))
+    // Accounting for some overflow that happens sometimes when enemy HP drops below 0
+    return (prev_hp > 0x00 && prev_hp < 0xF9) && !(current_hp > 0x00 && current_hp < 0xF9)
 }
 
 function IsPlayerDamagingAnyPartner() {
@@ -374,11 +384,11 @@ function IsPlayerDamagingAnyPartner() {
     return condition_met
 }
 
-function EnemiesKnockedOutInThisFrame() {
+function EnemiesKnockedOutInThisFrameByPlayer() {
     result = []
     for slot in all_entity_slots {
         address = EntityAddress(slot)
-        array_push(result, EntityExists(address) && !IsEntityAPartner(address) && EntityKnockedOut(address))
+        array_push(result, EntityExists(address) && !IsEntityAPartner(address) && EntityKnockedOutByPlayer(address))
     }
     return result
 }
@@ -387,7 +397,7 @@ function EnemiesKnockedOutInThisFrameByGun(attack_animation) {
     result = []
     for slot in all_entity_slots {
         address = EntityAddress(slot)
-        array_push(result, EntityExists(address) && !IsEntityAPartner(address) && IsPlayerDamagingEntity(address) && EntityKnockedOut(address) && (PlayerAnimationSet() == attack_animation || PlayerAnimationSet() == animation_gun_dive))
+        array_push(result, EntityExists(address) && !IsEntityAPartner(address) && IsPlayerDamagingEntity(address) && EntityKnockedOutByPlayer(address) && (PlayerAnimationSet() == attack_animation || PlayerAnimationSet() == animation_gun_dive))
     }
     return result
 }
@@ -396,16 +406,16 @@ function EnemiesKnockedOutInThisFrameByZantetsuken() {
     result = []
     for slot in all_entity_slots {
         address = EntityAddress(slot)
-        array_push(result, EntityExists(address) && !IsEntityAPartner(address) && IsPlayerDamagingEntity(address) && EntityKnockedOut(address) && (PlayerAnimationSet() == animation_zantetsuken_goemon || PlayerAnimationSet() == animation_zantetsuken_running_goemon))
+        array_push(result, EntityExists(address) && !IsEntityAPartner(address) && IsPlayerDamagingEntity(address) && EntityKnockedOutByPlayer(address) && (PlayerAnimationSet() == animation_zantetsuken_goemon || PlayerAnimationSet() == animation_zantetsuken_running_goemon))
     }
     return result
 }
 
-function IsAnyEnemyKnockedOut() {
+function IsAnyEnemyHealthDepleted() {
     condition_met = false
     for slot in all_entity_slots {
         address = EntityAddress(slot)
-        condition_met = condition_met || (EntityExists(address) && !IsEntityAPartner(address) && EntityKnockOutState(address) == 0x01)
+        condition_met = condition_met || (EntityExists(address) && !IsEntityAPartner(address) && IsEntityHealthDepleted(address))
     }
     return condition_met
 }
@@ -424,7 +434,7 @@ function IsAnyEnemyAlertAndHitWithArrowTrapLevel3() {
     condition_met = false
     for slot in all_entity_slots {
         address = EntityAddress(slot)
-        condition_met = condition_met || (EntityExists(address) && IsEntityAlert(address) && !IsPlayerDamagingEntity(address) && IsEntityTakingDamage(address))
+        condition_met = condition_met || (EntityExists(address) && IsEntityAlert(address) && IsEntityHealthDepletedOnThisFrame(address) && EntityKnockOutByPlayerState(address) == 0x00)
     }
     return condition_met
 }
@@ -594,7 +604,7 @@ achievement(
 
 achievement(
     title = "Ya any good at darts?", points = 4,
-    description = "Alert a guard and then lure them into getting hit with an arrow trap in Level 3",
+    description = "Alert a guard and then lure them into getting knocked out with an arrow trap in Level 3",
     id = 357455, badge = "402676", published = "9/21/2023 10:54:01 PM", modified = "9/21/2023 10:54:01 PM",
     trigger = InGame() && never(PlayerHP() == 0x00) && never(LevelID() != level_3) && trigger_when(IsAnyEnemyAlertAndHitWithArrowTrapLevel3())
 )
@@ -622,8 +632,8 @@ achievement(
     title = "Holy Humpty Mc-Dumpty", points = 3,
     description = "Knock out an unaware guard with the pillar trap in Level 6",
     id = 346234, badge = "391911", published = "8/19/2023 2:17:29 AM", modified = "9/19/2023 10:25:38 PM",
-    trigger = InGame() && never(PlayerHP() == 0x00) && never(LevelID() != level_6) && never(EntityKnockOutState(EntityAddress(2)) == 0x00) &&
-              never(Level6PillarRollingState() == 65426) && never(Level6PillarRollingState() == 65052) && EntityKnockedOut(EntityAddress(2)) &&
+    trigger = InGame() && never(PlayerHP() == 0x00) && never(LevelID() != level_6) && never(EntityKnockOutByPlayerState(EntityAddress(2)) == 0x00) &&
+              never(Level6PillarRollingState() == 65426) && never(Level6PillarRollingState() == 65052) && EntityKnockedOutByPlayer(EntityAddress(2)) &&
               Level6PillarRollingState() < 65172 && Level6PillarRollingState() > 65132
 )
 
@@ -683,7 +693,7 @@ achievement(
     description = "Have every single guard in an alert state at the same time after collecting the treasure in Level 13",
     id = 357899, badge = "403121", published = "9/24/2023 3:08:44 AM", modified = "9/24/2023 3:08:44 AM",
     trigger = InGame() && never(LevelID() != level_13) && never(PlayerHP() == 0x00) && never(!IsTreasureCollected()) &&
-              never(IsAnyEnemyKnockedOut()) && trigger_when(AreAllEnemiesAlert())
+              never(IsAnyEnemyHealthDepleted()) && trigger_when(AreAllEnemiesAlert())
 )
 
 achievement(
@@ -691,7 +701,7 @@ achievement(
     description = "Knock out 5 guards after using a single flash grenade before it's effect wears off in Level 14",
     id = 358173, badge = "403382",
     trigger = InGame() && never(LevelID() != level_14) && never(PlayerHP() == 0x00) && never(FlashGrenadeTimer() == 0x00) &&
-              never(prev(FlashGrenadeTimer()) < FlashGrenadeTimer()) && trigger_when(tally(5, EnemiesKnockedOutInThisFrame()))
+              never(prev(FlashGrenadeTimer()) < FlashGrenadeTimer()) && trigger_when(tally(5, EnemiesKnockedOutInThisFrameByPlayer()))
 )
 
 achievement(
