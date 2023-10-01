@@ -29,6 +29,51 @@ function PlayerCostume() => byte(0x000014)
 //          0x04 = Levels 2,3 Cleared, Levels 4,5,6 unlocked
 function ProgressionFlag() => byte(0x00001E)
 
+// $000050: [8-bit] Most recent total score earned for Level 1
+function MostRecentClearScoreLevel1() => byte(0x000050)
+
+// $000053: [8-bit] Most recent total score earned for Level 2
+function MostRecentClearScoreLevel2() => byte(0x000053)
+
+// $000052: [8-bit] Most recent total score earned for Level 3
+function MostRecentClearScoreLevel3() => byte(0x000052)
+
+// $000055: [8-bit] Most recent total score earned for Level 4
+function MostRecentClearScoreLevel4() => byte(0x000055)
+
+// $000054: [8-bit] Most recent total score earned for Level 5
+function MostRecentClearScoreLevel5() => byte(0x000054)
+
+// $000057: [8-bit] Most recent total score earned for Level 6
+function MostRecentClearScoreLevel6() => byte(0x000057)
+
+// $000056: [8-bit] Most recent total score earned for Level 7
+function MostRecentClearScoreLevel7() => byte(0x000056)
+
+// $000059: [8-bit] Most recent total score earned for Level 8
+function MostRecentClearScoreLevel8() => byte(0x000059)
+
+// $000058: [8-bit] Most recent total score earned for Level 9
+function MostRecentClearScoreLevel9() => byte(0x000058)
+
+// $00005B: [8-bit] Most recent total score earned for Level 10
+function MostRecentClearScoreLevel10() => byte(0x00005B)
+
+// $00005A: [8-bit] Most recent total score earned for Level 11
+function MostRecentClearScoreLevel11() => byte(0x00005A)
+
+// $00005D: [8-bit] Most recent total score earned for Level 12
+function MostRecentClearScoreLevel12() => byte(0x00005D)
+
+// $00005C: [8-bit] Most recent total score earned for Level 13
+function MostRecentClearScoreLevel13() => byte(0x00005C)
+
+// $00005F: [8-bit] Most recent total score earned for Level 14
+function MostRecentClearScoreLevel14() => byte(0x00005F)
+
+// $00005E: [8-bit] Most recent total score earned for Level 15
+function MostRecentClearScoreLevel15() => byte(0x00005E)
+
 // $0000A1: [8-bit] The level ID on the level results screen
 //          0x01 = Level 1 (Pyramid Entrance)
 //          0x02 = Level 2 (Underground Fortress)
@@ -46,6 +91,9 @@ function ProgressionFlag() => byte(0x00001E)
 //          0x0e = Level 14 (Power Reactor)
 //          0x0f = Level 15 (Power Center)
 function ResultsScreenLevelID() => byte(0x0000A1)
+
+// $0000A4: [8-bit] Total Score Value on the level results screen
+function ResultsScreenTotalScore() => byte(0x0000A4)
 
 // $0000A9: [8-bit] Demo Mode
 //          0x00 = Demo Mode Not Active
@@ -93,9 +141,12 @@ function GameState() => byte(0x13E502)
 //          0x01 = Load Screen (only when accessed from the Title Screen)
 //          0x02 = Stage Select
 //          0x03 = Options Screen
+//          0x04 = Level Preview Screen
+//          0x05 = Loading into level
 //          0x06 = Main Menu (Next Stage, Save, Load, etc)
 //          0x07 = Save Screen
 //          0x08 = Load Screen (only when accessed from the Main Menu)
+//          0x09 = Level Results Screen
 //          0x0a = Treasure Room
 function CurrentMenuScreen() => byte(0x13E509)
 
@@ -319,6 +370,8 @@ function IsTreasureCollected() => TrasureCollectedLevelFlag() == 0x03
 
 function ClearedLevel(min_difficulty, level_id, results_level_id) => NotInDemoMode() && never(PlayerHP() == 0x00) && never(GameDifficulty() < min_difficulty) &&
               once(LevelID() == level_id) && InMenus() && prev(GameState()) == 0x12 && ResultsScreenLevelID() == results_level_id
+              
+function AtLevelResultsScreenNotTreasureRoom() => InMenus() && CurrentMenuScreen() == 0x09
 
 function PlayingAsLupin() => PlayerCostume() == 0x00 || PlayerCostume() == 0x01 || PlayerCostume() == 0x02 || PlayerCostume() == 0x07
 function PlayingAsJigen() => PlayerCostume() == 0x03
@@ -327,6 +380,10 @@ function PlayingAsGoemon() => PlayerCostume() == 0x04
 function PlayerIsPunching() => PlayerAnimationSet() == 0x2E || PlayerAnimationSet() == 0x2F ||
                PlayerAnimationSet() == 0x4D || PlayerAnimationSet() == 0x2D || PlayerAnimationSet() == 0x5B || PlayerAnimationSet() == 0x4E ||
                PlayerAnimationSet() == 0x4B || PlayerAnimationSet() == 0x38 || PlayerAnimationSet() == 0x5C
+
+function CurrentTotalGameScore() => MostRecentClearScoreLevel1() + MostRecentClearScoreLevel2() + MostRecentClearScoreLevel3() + MostRecentClearScoreLevel4() + MostRecentClearScoreLevel5()
+                                    + MostRecentClearScoreLevel6() + MostRecentClearScoreLevel7() + MostRecentClearScoreLevel8() + MostRecentClearScoreLevel9() + MostRecentClearScoreLevel10()
+                                    + MostRecentClearScoreLevel11() + MostRecentClearScoreLevel12() + MostRecentClearScoreLevel13() + MostRecentClearScoreLevel14() + MostRecentClearScoreLevel15()
 
 function EntityAddress(slot) => entity_memory_location + (entity_memory_size * slot)
 
@@ -759,6 +816,18 @@ achievement(
     trigger = never(SurvivalModeRound() == 0x00) && never(SurvivalModeTimer() == 0x00) && never(SurvivalModePlayerHealth() == 0x00) && GameDifficulty() == 0x01 &&
               PlayingAsGoemon() && once(prev(SurvivalModeRound()) == 0x01) && once(prev(SurvivalModeRound()) == 0x26) && 
               SurvivalModeRound() == 0x27 && SurvivalModeEnemyCount() == 0x00 && SurvivalModeTimer() < 12000
+)
+
+achievement(
+    title = "Dammit, I'm good", points = 10,
+    description = "Achieve a perfect score of 100 in any level on Hyper difficulty",
+    trigger = AtLevelResultsScreenNotTreasureRoom() && GameDifficulty() == hyper_difficulty && ResultsScreenTotalScore() == 100
+)
+
+achievement(
+    title = "Are we too career-oriented?", points = 25,
+    description = "After clearing a level, have a current combined total score of 1400 or more across all levels",
+    trigger = GameState() == 0x00 && prev(CurrentMenuScreen()) == 0x09 && CurrentMenuScreen() == 0x06 && measured(CurrentTotalGameScore() >= 1400, ProgressionFlag() > 0x02, "raw")
 )
 
 achievement(
