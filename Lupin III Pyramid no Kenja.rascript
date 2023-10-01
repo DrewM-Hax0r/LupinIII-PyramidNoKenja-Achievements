@@ -341,6 +341,12 @@ entity_damaged_by_player_count_offset = 0x92 // This offset points to a value th
 
 all_entity_slots = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18]
 
+partner_jigen = 0x0A
+partner_goemon = 0x0B
+partner_zenigata = 0x0C
+partner_lupin = 0x0D
+enemy_final_boss = 0x08
+
 animation_gun_lupin = 0x42
 animation_gun_jigen = 0x54
 animation_gun_dive = 0x61
@@ -376,6 +382,7 @@ function AtLevelResultsScreenNotTreasureRoom() => InMenus() && CurrentMenuScreen
 function PlayingAsLupin() => PlayerCostume() == 0x00 || PlayerCostume() == 0x01 || PlayerCostume() == 0x02 || PlayerCostume() == 0x07
 function PlayingAsJigen() => PlayerCostume() == 0x03
 function PlayingAsGoemon() => PlayerCostume() == 0x04
+function PlayingAsZenigata() => PlayerCostume() == 0x06
 
 function PlayerIsPunching() => PlayerAnimationSet() == 0x2E || PlayerAnimationSet() == 0x2F ||
                PlayerAnimationSet() == 0x4D || PlayerAnimationSet() == 0x2D || PlayerAnimationSet() == 0x5B || PlayerAnimationSet() == 0x4E ||
@@ -409,7 +416,12 @@ function IsEntityAlert(entity_address) {
 
 function IsEntityAPartner(entity_address) {
     type = byte(entity_address + entity_type_offset)
-    return type == 0x0A || type == 0x0B || type == 0x0C || type == 0x0D
+    return type == partner_jigen || type == partner_goemon || type == partner_zenigata || type == partner_lupin
+}
+
+function IsEntity(entity_address, required_type) {
+    type = byte(entity_address + entity_type_offset)
+    return type == required_type
 }
 
 function IsPlayerDamagingEntity(entity_address) {
@@ -431,6 +443,10 @@ function IsEntityHealthDepletedOnThisFrame(entity_address) {
     // Accounting for some overflow that happens sometimes when enemy HP drops below 0
     return (prev_hp > 0x00 && prev_hp < 0xF9) && !(current_hp > 0x00 && current_hp < 0xF9)
 }
+
+function IsFinalBossLoadedIn() => EntityExists(0x1B5B68) && IsEntity(0x1B5B68, enemy_final_boss)
+
+function IsFinalBossHealthDepletedOnThisFrame() => IsEntityHealthDepletedOnThisFrame(0x1B5B68)
 
 function IsPlayerDamagingAnyPartner() {
     condition_met = false
@@ -475,6 +491,16 @@ function IsAnyEnemyHealthDepleted() {
         condition_met = condition_met || (EntityExists(address) && !IsEntityAPartner(address) && IsEntityHealthDepleted(address))
     }
     return condition_met
+}
+
+function FinalBossFightAllPartnersExistAndStillAlive() {
+    jigen = 0x1B5D3C
+    jigen_alive = EntityExists(jigen) && IsEntity(jigen, partner_jigen) && !IsEntityHealthDepleted(jigen)
+    goemon = 0x1B5DD8
+    goemon_alive = EntityExists(goemon) && IsEntity(goemon, partner_goemon) && !IsEntityHealthDepleted(goemon)
+    lupin = 0x1B5E74
+    lupin_alive = EntityExists(lupin) && IsEntity(lupin, partner_lupin) && !IsEntityHealthDepleted(lupin)
+    return jigen_alive && goemon_alive && lupin_alive
 }
 
 function AreAllEnemiesAlert() {
@@ -819,20 +845,31 @@ achievement(
 )
 
 achievement(
+    title = "Temporary Interim Alliance Agreement", points = 10,
+    description = "Play as Zenigata and defeat the final boss in Level 15 after having freed Lupin, Jigen, and Goemon and having them all survive the final boss fight on Hard difficulty",
+    id = 360311, badge = "405779",
+    trigger = InGame() && PlayingAsZenigata() && GameDifficultyIs(hard_difficulty) && never(LevelID() != level_15_3) && never(!IsFinalBossLoadedIn()) && FinalBossFightAllPartnersExistAndStillAlive() &&
+              trigger_when(IsFinalBossHealthDepletedOnThisFrame())
+)
+
+achievement(
     title = "Dammit, I'm good", points = 10,
     description = "Achieve a perfect score of 100 in any level on Hyper difficulty",
+    id = 360041, badge = "405387",
     trigger = AtLevelResultsScreenNotTreasureRoom() && GameDifficulty() == hyper_difficulty && ResultsScreenTotalScore() == 100
 )
 
 achievement(
     title = "Are we too career-oriented?", points = 25,
     description = "After clearing a level, have a current combined total score of 1400 or more across all levels",
-    trigger = GameState() == 0x00 && prev(CurrentMenuScreen()) == 0x09 && CurrentMenuScreen() == 0x06 && measured(CurrentTotalGameScore() >= 1400, ProgressionFlag() > 0x02, "raw")
+    id = 360312, badge = "405780",
+    trigger = GameState() == 0x00 && measured(CurrentTotalGameScore() >= 1400, ProgressionFlag() > 0x02, "raw") && prev(CurrentMenuScreen()) == 0x09 && (CurrentMenuScreen() == 0x06 || CurrentMenuScreen() == 0x07)
 )
 
 achievement(
     title = "Exceeding the speed limit", points = 50,
     description = "Begin a New Game and complete a single-segment speedrun in under 1 hour",
+    id = 359320, badge = "405803",
     trigger = once(StartedNewGame()) && ResetIfTimeExceeds(Seconds(3600)) && ResetIfGameSaveIsLoaded() &&
               trigger_when(ClearedLevel(easy_difficulty, level_15_3, results_level_15))
 )
