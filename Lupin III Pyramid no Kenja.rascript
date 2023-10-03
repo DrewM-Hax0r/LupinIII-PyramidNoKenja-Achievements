@@ -135,6 +135,7 @@ function LevelID() => byte(0x0000E2)
 //          0x00 = Viewing any menu screen (Including level results, if not opened from Treasure Room)
 //          0x01 = Viewing level results screen from Treasure Room
 //          0x12 = In Game
+//          0xdc = Survival Mode
 function GameState() => byte(0x13E502)
 
 // $13E509: [8-bit] Current Menu Screen
@@ -367,6 +368,8 @@ function GameDifficultyIs(difficulty) => GameDifficulty() == difficulty
 function StartedNewGame() => prev(ProgressionFlag()) == 0x01 && ProgressionFlag() == 0x02
 
 function InGame() => NotInDemoMode() && never(GameState() != 0x12)
+
+function InSurvivalMode() => never(GameState() != 0xDC)
 
 function InMenus() => GameState() == 0x00
 
@@ -836,12 +839,30 @@ achievement(
 )
 
 achievement(
+    title = "The guy's possessed, he could probably bench press Shaq", points = 10,
+    description = "Clear Survival Mode as Lupin in less than 15 minutes on Hard difficulty",
+    id = 360746, badge = "406222",
+    trigger = InSurvivalMode() && never(SurvivalModeTimer() == 0x00) && never(SurvivalModePlayerHealth() == 0x00) &&
+              GameDifficulty() == hard_difficulty && PlayingAsLupin() && never(SurvivalModeTimer() >= 18000) && once(prev(SurvivalModeTimer()) == 0 && SurvivalModeTimer() == 1) &&
+              trigger_when(once(prev(SurvivalModeRound()) == 0x01) && once(prev(SurvivalModeRound()) == 0x3A) && SurvivalModeRound() == 0x3B && SurvivalModeEnemyCount() == 0x00)
+)
+
+achievement(
+    title = "Gettin' Jigen with it", points = 10,
+    description = "Clear Survival Mode as Jigen in less than 5 minutes on Easy difficulty",
+    id = 360728, badge = "406212",
+    trigger = InSurvivalMode() && never(SurvivalModeTimer() == 0x00) && never(SurvivalModePlayerHealth() == 0x00) &&
+              GameDifficulty() == easy_difficulty && PlayingAsJigen() && never(SurvivalModeTimer() >= 6000) && once(prev(SurvivalModeTimer()) == 0 && SurvivalModeTimer() == 1) &&
+              trigger_when(once(prev(SurvivalModeRound()) == 0x01) && once(prev(SurvivalModeRound()) == 0x26) && SurvivalModeRound() == 0x27 && SurvivalModeEnemyCount() == 0x00)
+)
+
+achievement(
     title = "A 10-minute egg must boil for 10 minutes", points = 10,
     description = "Clear Survival Mode as Goemon in less than 10 minutes on Normal difficulty",
     id = 346458, badge = "391912", published = "8/20/2023 5:16:30 PM", modified = "9/9/2023 12:56:28 AM",
-    trigger = never(SurvivalModeRound() == 0x00) && never(SurvivalModeTimer() == 0x00) && never(SurvivalModePlayerHealth() == 0x00) && GameDifficulty() == 0x01 &&
-              PlayingAsGoemon() && once(prev(SurvivalModeRound()) == 0x01) && once(prev(SurvivalModeRound()) == 0x26) && 
-              SurvivalModeRound() == 0x27 && SurvivalModeEnemyCount() == 0x00 && SurvivalModeTimer() < 12000
+    trigger = InSurvivalMode() && never(SurvivalModeTimer() == 0x00) && never(SurvivalModePlayerHealth() == 0x00) &&
+              GameDifficulty() == normal_difficulty && PlayingAsGoemon() && never(SurvivalModeTimer() >= 12000) && once(prev(SurvivalModeTimer()) == 0 && SurvivalModeTimer() == 1) &&
+              trigger_when(once(prev(SurvivalModeRound()) == 0x01) && once(prev(SurvivalModeRound()) == 0x26) && SurvivalModeRound() == 0x27 && SurvivalModeEnemyCount() == 0x00)
 )
 
 achievement(
