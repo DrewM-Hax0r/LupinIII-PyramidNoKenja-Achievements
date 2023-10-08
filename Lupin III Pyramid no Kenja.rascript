@@ -396,7 +396,9 @@ function InSurvivalMode() => never(GameState() != 0xDC)
 
 function InMenus() => GameState() == 0x00
 
-function ResetIfGameSaveIsLoaded() => never(GameState() == 0x00 && CurrentMenuScreen() == 0x08 && prev(LoadSaveTriggerFlag()) == 0x00 && LoadSaveTriggerFlag() == 0x01)
+function GameSaveIsLoaded() => GameState() == 0x00 && CurrentMenuScreen() == 0x08 && prev(LoadSaveTriggerFlag()) == 0x00 && LoadSaveTriggerFlag() == 0x01
+
+function ResetIfGameSaveIsLoaded() => never(GameSaveIsLoaded())
 
 function IsTreasureCollected() => TrasureCollectedLevelFlag() == 0x03
 
@@ -458,7 +460,7 @@ function IsPlayerDamagingEntity(entity_address) {
 function IsEntityHealthDepleted(entity_address) {
     hp_address = entity_address + entity_hp_offset
     current_hp = byte(hp_address)
-    // Accounting for some overflow that happens sometimes when enemy HP drops below 0
+    // Accounting for some underflow that happens sometimes when enemy HP drops below 0
     return !(current_hp > 0x00 && current_hp < 0xF9)
 }
 
@@ -466,7 +468,7 @@ function IsEntityHealthDepletedOnThisFrame(entity_address) {
     hp_address = entity_address + entity_hp_offset
     current_hp = byte(hp_address)
     prev_hp = prev(byte(hp_address))
-    // Accounting for some overflow that happens sometimes when enemy HP drops below 0
+    // Accounting for some underflow that happens sometimes when enemy HP drops below 0
     return (prev_hp > 0x00 && prev_hp < 0xF9) && !(current_hp > 0x00 && current_hp < 0xF9)
 }
 
@@ -1019,6 +1021,18 @@ function LeaderboardSurvivalModeComplete(difficulty) {
 }
 
 function SurvivalModeTimerInMilliseconds() => (SurvivalModeTimer() * 100) / 20
+
+leaderboard(
+    title = "Single-Segment Speedrun",
+    description = "Fastest time for starting a new game and beating it in a single session",
+    start = StartedNewGame(),
+    cancel = GameSaveIsLoaded(),
+    submit = ClearedLevel(normal_difficulty, level_15_3, results_level_15),
+    value = measured(tally(0, ProgressionFlag() > 0x01)),
+    format = "FRAMES",
+    lower_is_better = true,
+    id = 79076
+)
 
 leaderboard(
     title = "Survival Mode (Easy Difficulty)",
