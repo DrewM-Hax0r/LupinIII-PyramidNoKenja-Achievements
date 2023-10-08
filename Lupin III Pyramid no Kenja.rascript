@@ -92,6 +92,11 @@ function MostRecentClearScoreLevel15() => byte(0x00005E)
 //          0x0f = Level 15 (Power Center)
 function ResultsScreenLevelID() => byte(0x0000A1)
 
+// $0000A3: [8-bit] Number of times spotted by the enemy (hidden value for level results screen, effects score calculation)
+//          This value only counts times seen by unique enemies, so being seen by the same enemy 2 different times will only count for 1
+//          Additionally, some enemy types in some levels do not count towards this value when spotted (like spiders, since they need to be aggro'd to be defeated)
+function ResultsScreenTimesAlertedEnemies() => byte(0x0000A3)
+
 // $0000A4: [8-bit] Total Score Value on the level results screen
 function ResultsScreenTotalScore() => byte(0x0000A4)
 
@@ -155,6 +160,12 @@ function CurrentMenuScreen() => byte(0x13E509)
 //          Changes from 0x00 to 0x01 when a file is loaded, or saved
 function LoadSaveTriggerFlag() => byte(0x1452C2)
 
+// $186255: [8-bit] Current number of land mines held by the player (Survival Mode)
+function SurvivalModeLandMinesHeld() => byte(0x186255)
+
+// $186257: [8-bit] Current number of flash grenades held by player (Survival Mode)
+function SurvivalModeFlashGrenadesHeld() => byte(0x186257)
+
 // $1865AA: [16-bit] Survival mode timer
 function SurvivalModeTimer() => word(0x1865AA)
 
@@ -164,6 +175,11 @@ function TrasureCollectedLevelFlag() => byte(0x18B2D0)
 
 // $18B2D2: [8-bit] The game is paused if this value is greater than 0x00
 function GamePaused() => byte(0x18B2D2)
+
+// $18B2D5: [8-bit] Disguise flag - used in conjunction with address 0x19fa86 (disguise timer)
+//          0x00 = Disguise not active
+//          0x01 = Disguise active
+function DisguiseStatus() => byte(0x18B2D5)
 
 // $1913C6: [8-bit] Flash grenade timer - decreases by 1 each game tick, when value reaches 0x00 flash grenade effect wares off
 //          0x00 = Flash grenade not active
@@ -273,6 +289,12 @@ function PlayerHP() => byte(0x1AEC11)
 //          0xfe1c = Final state
 function Level6PillarRollingState() => word(0x1B3C48)
 
+// $1B402E: [16-bit] [Level 12] Piston A Timer
+function Level12PistonATimer() => word(0x1B402E)
+
+// $1B406E: [16-bit] [Level 12] Piston B Timer
+function Level12PistonBTimer() => word(0x1B406E)
+
 // -----------------
 // --- Variables ---
 // -----------------
@@ -347,6 +369,7 @@ partner_goemon = 0x0B
 partner_zenigata = 0x0C
 partner_lupin = 0x0D
 enemy_final_boss = 0x08
+enemy_spider = 0x06
 
 animation_gun_lupin = 0x42
 animation_gun_jigen = 0x54
@@ -516,6 +539,15 @@ function AreAllEnemiesAlert() {
     return condition_met
 }
 
+function SpidersCrushedOnThisFrame() {
+    result = []
+    for slot in all_entity_slots {
+        address = EntityAddress(slot)
+        array_push(result, EntityExists(address) && IsEntity(address, enemy_spider) && prev(EntityAnimationSet(address)) != 0x0E && EntityAnimationSet(address) == 0x0E && IsEntityHealthDepleted(address))
+    }
+    return result
+}
+
 function IsAnyEnemyAlertAndHitWithArrowTrapLevel3() {
     condition_met = false
     for slot in all_entity_slots {
@@ -544,6 +576,10 @@ function AreAllTreasureRoomEnemiesInWaterLevel10() {
         condition_met = condition_met && once(LevelID() == level_10_2 && IsTreasureCollected() && (!valid_to_check || (valid_to_check && EntityZLocation(address) == 0x012B)))
     }
     return condition_met
+}
+
+function PistonTrapReset(timer) {
+    return prev(timer) == 0x00 && timer > 0x00
 }
 
 // Detects the moment when the player begins playing a level, either by first load into it or retry after having previously died
@@ -767,11 +803,11 @@ achievement(
 )
 
 achievement(
-    title = "Either I'm loaded, or the ceiling's getting lower", points = 1,
-    description = "Get knocked out from being crushed by a piston in Level 12",
-    id = 345747, badge = "391909", published = "8/17/2023 2:11:34 AM", modified = "8/26/2023 10:25:52 PM",
-    trigger = InGame() && never(LevelID() != level_12) && never(prior(PlayerHP()) == 0x00) && 
-              PlayerHP() == 0x00 && PlayerAnimationSet() == 0x07
+    title = "Either I'm loaded, or the ceiling's getting lower", points = 5,
+    description = "Crush two spiders at the same time with a piston trap in Level 12",
+    id = 362140, badge = "407708",
+    trigger = InGame() && never(LevelID() != level_12) && never(PlayerHP() == 0x00) &&
+              never(PistonTrapReset(Level12PistonATimer())) && never(PistonTrapReset(Level12PistonBTimer())) && tally(2, SpidersCrushedOnThisFrame())
 )
 
 achievement(
@@ -836,6 +872,27 @@ achievement(
               ((LevelID() == level_6 && PlayerZLocation() == 65535) ||
                (LevelID() == level_12 && PlayerZLocation() == 65526) ||
                (LevelID() == level_13 && PlayerZLocation() == 65455))
+)
+
+achievement(
+    title = "A conman is a better actor than an actor is a conman", points = 3,
+    description = "In a single session, spend a total of at least 60 seconds in various disguises",
+    id = 361123, badge = "406556",
+    trigger = GameState() == 0x12 && repeated(Seconds(60), DisguiseStatus() == 0x01)
+)
+
+achievement(
+    title = "I just love it when our victims are punctual", points = 3,
+    description = "In a single Survival Mode run, place a total of 10 land mines",
+    id = 361126, badge = "406558",
+    trigger = InSurvivalMode() && never(SurvivalModePlayerHealth() == 0x00) && repeated(10, prev(SurvivalModeLandMinesHeld()) > SurvivalModeLandMinesHeld())
+)
+
+achievement(
+    title = "It's torture!  Get me some asprin!", points = 3,
+    description = "In a single Survival Mode run, use a total of 10 flash grenades",
+    id = 361125, badge = "406557",
+    trigger = InSurvivalMode() && never(SurvivalModePlayerHealth() == 0x00) && repeated(10, prev(SurvivalModeFlashGrenadesHeld()) > SurvivalModeFlashGrenadesHeld())
 )
 
 achievement(
@@ -930,4 +987,71 @@ achievement(
     description = "Play as Lupin and land a punch on one of your partners",
     id = 354507, badge = "399500", published = "9/9/2023 2:31:26 AM", modified = "9/15/2023 12:56:47 AM",
     trigger = InGame() && PlayingAsLupin() && PlayerIsPunching() && IsPlayerDamagingAnyPartner()
+)
+
+achievement(
+    title = "Red's probably not the best color for trying to be inconspicuous", points = 3,
+    description = "Play as any character besides Part II Lupin and complete any level without alerting a single enemy",
+    id = 361369, badge = "406723",
+    trigger = never(PlayerCostume() == 0x01) && AtLevelResultsScreenNotTreasureRoom() && ResultsScreenTimesAlertedEnemies() == 0
+)
+
+achievement(
+    title = "Inspector Origami", points = 1,
+    description = "Play as Zenigata and get crushed by a piston trap in Level 12",
+    id = 345747, badge = "407707", published = "8/17/2023 2:11:34 AM", modified = "8/26/2023 10:25:52 PM",
+    trigger = InGame() && PlayingAsZenigata() && never(LevelID() != level_12) && never(prior(PlayerHP()) == 0x00) &&
+              PlayerHP() == 0x00 && PlayerAnimationSet() == 0x07
+)
+
+// --------------------
+// --- Leaderboards ---
+// --------------------
+
+function LeaderboardSurvivalModeComplete(difficulty) {
+    prereq = InSurvivalMode() && GameDifficulty() == difficulty && SurvivalModePlayerHealth() > 0x00 && SurvivalModeEnemyCount() == 0x00
+    if(difficulty == easy_difficulty || difficulty == normal_difficulty) {
+        prereq = prereq && SurvivalModeRound() == 0x27
+    } else if(difficulty == hard_difficulty) {
+        prereq = prereq && SurvivalModeRound() == 0x3B
+    }
+    return prereq
+}
+
+function SurvivalModeTimerInMilliseconds() => (SurvivalModeTimer() * 100) / 20
+
+leaderboard(
+    title = "Survival Mode (Easy Difficulty)",
+    description = "Fastest time on Survival Mode, Easy difficulty, playing as any character of your choosing",
+    start = LeaderboardSurvivalModeComplete(easy_difficulty),
+    cancel = GameState() != 0xDC,
+    submit = LeaderboardSurvivalModeComplete(easy_difficulty),
+    value = SurvivalModeTimerInMilliseconds(),
+    format = "MILLISECS",
+    lower_is_better = true,
+    id = 78944
+)
+
+leaderboard(
+    title = "Survival Mode (Normal Difficulty)",
+    description = "Fastest time on Survival Mode, Normal difficulty, playing as any character of your choosing",
+    start = LeaderboardSurvivalModeComplete(normal_difficulty),
+    cancel = GameState() != 0xDC,
+    submit = LeaderboardSurvivalModeComplete(normal_difficulty),
+    value = SurvivalModeTimerInMilliseconds(),
+    format = "MILLISECS",
+    lower_is_better = true,
+    id = 78945
+)
+
+leaderboard(
+    title = "Survival Mode (Hard Difficulty)",
+    description = "Fastest time on Survival Mode, Hard difficulty, playing as any character of your choosing",
+    start = LeaderboardSurvivalModeComplete(hard_difficulty),
+    cancel = GameState() != 0xDC,
+    submit = LeaderboardSurvivalModeComplete(hard_difficulty),
+    value = SurvivalModeTimerInMilliseconds(),
+    format = "MILLISECS",
+    lower_is_better = true,
+    id = 78946
 )
