@@ -899,10 +899,10 @@ achievement(
 
 achievement(
     title = "The guy's possessed, he could probably bench press Shaq", points = 10,
-    description = "Clear Survival Mode as Lupin in less than 15 minutes on Hard difficulty",
+    description = "Clear Survival Mode as Lupin in less than 20 minutes on Hard difficulty",
     id = 360746, badge = "406222",
     trigger = InSurvivalMode() && never(SurvivalModeTimer() == 0x00) && never(SurvivalModePlayerHealth() == 0x00) &&
-              GameDifficulty() == hard_difficulty && PlayingAsLupin() && never(SurvivalModeTimer() >= 18000) && once(prev(SurvivalModeTimer()) == 0 && SurvivalModeTimer() == 1) &&
+              GameDifficulty() == hard_difficulty && PlayingAsLupin() && never(SurvivalModeTimer() >= 24000) && once(prev(SurvivalModeTimer()) == 0 && SurvivalModeTimer() == 1) &&
               trigger_when(once(prev(SurvivalModeRound()) == 0x01) && once(prev(SurvivalModeRound()) == 0x3A) && SurvivalModeRound() == 0x3B && SurvivalModeEnemyCount() == 0x00)
 )
 
