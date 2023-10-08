@@ -948,7 +948,7 @@ achievement(
 
 achievement(
     title = "Exceeding the speed limit", points = 50,
-    description = "Begin a New Game and complete a single-segment speedrun in under 1 hour",
+    description = "Begin a New Game and complete a single-segment speedrun in under 1 hour, on any difficulty",
     id = 359320, badge = "405803",
     trigger = once(StartedNewGame()) && ResetIfTimeExceeds(Seconds(3600)) && ResetIfGameSaveIsLoaded() &&
               trigger_when(ClearedLevel(easy_difficulty, level_15_3, results_level_15))
@@ -1023,10 +1023,10 @@ function LeaderboardSurvivalModeComplete(difficulty) {
 function SurvivalModeTimerInMilliseconds() => (SurvivalModeTimer() * 100) / 20
 
 leaderboard(
-    title = "Single-Segment Speedrun",
-    description = "Fastest time for starting a new game and beating it in a single session",
+    title = "Single-Segment Speedrun (Normal Difficulty)",
+    description = "Fastest time for starting a new game and beating it in a single session, on Normal Difficulty",
     start = StartedNewGame(),
-    cancel = GameSaveIsLoaded(),
+    cancel = GameSaveIsLoaded() || GameDifficulty() != normal_difficulty,
     submit = ClearedLevel(normal_difficulty, level_15_3, results_level_15),
     value = measured(tally(0, ProgressionFlag() > 0x01)),
     format = "FRAMES",
