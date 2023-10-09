@@ -594,6 +594,8 @@ function Level2AllGlassBroken() => byte(0x0047F6) == 0x00 && byte(0x0057FE) == 0
 
 function Level5KeyCollected() => once(once(prev(Level5KeyFlag()) == 0x00) && Level5KeyFlag() == 0x01)
 
+function Level15StolePinkDiamond() => LevelID() == level_15_3 && PlayerAnimationSet() == 0x28 && PlayerYLocation() > 0x0328
+
 // Once the player has gone higher up than the provided activate_at position, the achivement will reset if the player ever drops below the provided reset_threshold position
 function OneWayZPositionCheckpointPassed(activate_at, reset_threshold) => never((once(PlayerZLocation() <= activate_at) && PlayerZLocation() >= reset_threshold))
 
@@ -950,8 +952,8 @@ achievement(
     title = "Exceeding the speed limit", points = 50,
     description = "Begin a New Game and complete a single-segment speedrun in under 1 hour, on any difficulty",
     id = 359320, badge = "405803",
-    trigger = once(StartedNewGame()) && ResetIfTimeExceeds(Seconds(3600)) && ResetIfGameSaveIsLoaded() &&
-              trigger_when(ClearedLevel(easy_difficulty, level_15_3, results_level_15))
+    trigger = once(StartedNewGame()) && ResetIfTimeExceeds(Seconds(3600)) && never(ProgressionFlag() < 0x02) && ResetIfGameSaveIsLoaded() &&
+              trigger_when(Level15StolePinkDiamond())
 )
 
 achievement(
@@ -1023,11 +1025,11 @@ function LeaderboardSurvivalModeComplete(difficulty) {
 function SurvivalModeTimerInMilliseconds() => (SurvivalModeTimer() * 100) / 20
 
 leaderboard(
-    title = "Single-Segment Speedrun (Normal Difficulty)",
-    description = "Fastest time for starting a new game and beating it in a single session, on Normal Difficulty",
+    title = "Single-Segment Speedrun (Normal Difficulty, Lupin Only)",
+    description = "Fastest time for starting a new game and beating it in a single session, playing as Lupin on Normal Difficulty",
     start = StartedNewGame(),
-    cancel = GameSaveIsLoaded() || GameDifficulty() != normal_difficulty,
-    submit = ClearedLevel(normal_difficulty, level_15_3, results_level_15),
+    cancel = GameSaveIsLoaded() || GameDifficulty() != normal_difficulty || !PlayingAsLupin() || ProgressionFlag() < 0x02,
+    submit = Level15StolePinkDiamond(),
     value = measured(tally(0, ProgressionFlag() > 0x01)),
     format = "FRAMES",
     lower_is_better = true,
