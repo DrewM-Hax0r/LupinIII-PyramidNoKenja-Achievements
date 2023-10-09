@@ -485,29 +485,29 @@ function IsPlayerDamagingAnyPartner() {
     return condition_met
 }
 
-function EnemiesKnockedOutInThisFrameByPlayer() {
+function EnemiesKnockedOutInThisFrame() {
     result = []
     for slot in all_entity_slots {
         address = EntityAddress(slot)
-        array_push(result, EntityExists(address) && !IsEntityAPartner(address) && EntityKnockedOutByPlayer(address))
+        array_push(result, EntityExists(address) && !IsEntityAPartner(address) && IsEntityHealthDepletedOnThisFrame(address))
     }
     return result
 }
 
-function EnemiesKnockedOutInThisFrameByGun(attack_animation) {
+function EnemiesHitInThisFrameByGun(attack_animation) {
     result = []
     for slot in all_entity_slots {
         address = EntityAddress(slot)
-        array_push(result, EntityExists(address) && !IsEntityAPartner(address) && IsPlayerDamagingEntity(address) && EntityKnockedOutByPlayer(address) && (PlayerAnimationSet() == attack_animation || PlayerAnimationSet() == animation_gun_dive))
+        array_push(result, EntityExists(address) && !IsEntityAPartner(address) && IsPlayerDamagingEntity(address) && (PlayerAnimationSet() == attack_animation || PlayerAnimationSet() == animation_gun_dive))
     }
     return result
 }
 
-function EnemiesKnockedOutInThisFrameByZantetsuken() {
+function EnemiesHitInThisFrameByZantetsuken() {
     result = []
     for slot in all_entity_slots {
         address = EntityAddress(slot)
-        array_push(result, EntityExists(address) && !IsEntityAPartner(address) && IsPlayerDamagingEntity(address) && EntityKnockedOutByPlayer(address) && (PlayerAnimationSet() == animation_zantetsuken_goemon || PlayerAnimationSet() == animation_zantetsuken_running_goemon))
+        array_push(result, EntityExists(address) && !IsEntityAPartner(address) && IsPlayerDamagingEntity(address) && (PlayerAnimationSet() == animation_zantetsuken_goemon || PlayerAnimationSet() == animation_zantetsuken_running_goemon))
     }
     return result
 }
@@ -827,7 +827,7 @@ achievement(
     description = "Knock out 5 guards after using a single flash grenade before it's effect wears off in Level 14",
     id = 358173, badge = "403382",
     trigger = InGame() && never(LevelID() != level_14) && never(PlayerHP() == 0x00) && never(FlashGrenadeTimer() == 0x00) &&
-              never(prev(FlashGrenadeTimer()) < FlashGrenadeTimer()) && trigger_when(tally(5, EnemiesKnockedOutInThisFrameByPlayer()))
+              never(prev(FlashGrenadeTimer()) < FlashGrenadeTimer()) && tally(5, EnemiesKnockedOutInThisFrame())
 )
 
 achievement(
@@ -840,23 +840,23 @@ achievement(
 
 achievement(
     title = "And not just shot, but shot!  And then shot a couple more times!", points = 5,
-    description = "In a single session, play as Lupin and knock out a total of 15 enemies with gunshots from his Walther P38 (excludes Survival Mode)",
+    description = "In a single session, play as Lupin and hit enemies with gunshots from his Walther P38 a total of 15 times (excludes Survival Mode)",
     id = 358249, badge = "403580",
-    trigger = InGame() && PlayingAsLupin() && measured(tally(15, EnemiesKnockedOutInThisFrameByGun(animation_gun_lupin)), PlayingAsLupin(), "raw")
+    trigger = InGame() && PlayingAsLupin() && measured(tally(15, EnemiesHitInThisFrameByGun(animation_gun_lupin)), PlayingAsLupin(), "raw")
 )
 
 achievement(
     title = "Show's over, eat lead", points = 5,
-    description = "In a single session, play as Jigen and knock out a total of 15 enemies with gunshots from his revolver (excludes Survival Mode)",
+    description = "In a single session, play as Jigen and hit enemies with gunshots from his revolver a total of 15 times (excludes Survival Mode)",
     id = 358251, badge = "403582",
-    trigger = InGame() && PlayingAsJigen() && measured(tally(15, EnemiesKnockedOutInThisFrameByGun(animation_gun_jigen)), PlayingAsJigen() || PlayerCostume() == 0x10, "raw")
+    trigger = InGame() && PlayingAsJigen() && measured(tally(15, EnemiesHitInThisFrameByGun(animation_gun_jigen)), PlayingAsJigen() || PlayerCostume() == 0x10, "raw")
 )
 
 achievement(
     title = "Once again, I've cut another worthless object", points = 5,
-    description = "In a single session, play as Goemon and knock out a total of 15 enemies with the Zantetsuken's blade (excludes Survival Mode)",
+    description = "In a single session, play as Goemon and hit enemies with the Zantetsuken's blade a total of 15 times (excludes Survival Mode)",
     id = 359063, badge = "404479",
-    trigger = InGame() && PlayingAsGoemon() && measured(tally(15, EnemiesKnockedOutInThisFrameByZantetsuken()), PlayingAsGoemon() || PlayerCostume() == 0x10, "raw")
+    trigger = InGame() && PlayingAsGoemon() && measured(tally(15, EnemiesHitInThisFrameByZantetsuken()), PlayingAsGoemon() || PlayerCostume() == 0x10, "raw")
 )
 
 achievement(
