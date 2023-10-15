@@ -1004,9 +1004,9 @@ achievement(
 
 achievement(
     title = "Red's probably not the best color for trying to be inconspicuous", points = 3,
-    description = "Play as any character besides Part II Lupin and complete any level without alerting a single enemy",
+    description = "Play as Part I Lupin or Part III Lupin and complete any level without alerting a single enemy",
     id = 361369, badge = "406723",
-    trigger = never(PlayerCostume() == 0x01) && AtLevelResultsScreenNotTreasureRoom() && ResultsScreenTimesAlertedEnemies() == 0
+    trigger = (PlayerCostume() == 0x00 || PlayerCostume() == 0x02 ) && AtLevelResultsScreenNotTreasureRoom() && ResultsScreenTimesAlertedEnemies() == 0
 )
 
 achievement(
