@@ -386,11 +386,15 @@ function Seconds(seconds) => seconds * 60
 
 function NotInDemoMode() => never(DemoMode() == 0x01)
 
+function PauseInDemoMode() => unless(DemoMode() == 0x01)
+
 function GameDifficultyIs(difficulty) => GameDifficulty() == difficulty
 
 function StartedNewGame() => prev(ProgressionFlag()) == 0x01 && ProgressionFlag() == 0x02
 
 function InGame() => NotInDemoMode() && never(GameState() != 0x12)
+
+function PauseIfNotInGame() => PauseInDemoMode() && unless(GameState() != 0x12)
 
 function InSurvivalMode() => never(GameState() != 0xDC)
 
@@ -585,7 +589,7 @@ function PistonTrapReset(timer) {
 }
 
 // Detects the moment when the player begins playing a level, either by first load into it or retry after having previously died
-function StartOfLevel() => once(PlayerHP() == 0x10) && once((once(prev(word(0x13E502)) == 0) || once(prev(PlayerHP()) == 0)) && PlayerHP() == 0x10)
+function StartOfLevel() => once(prev(GameState()) == 0x00 && GameState() == 0x12) || once(prev(PlayerHP()) == 0x00 && PlayerHP() == 0x10)
 
 function Level2AllGlassBroken() => byte(0x0047F6) == 0x00 && byte(0x0057FE) == 0x00 && byte(0x0049AE) == 0x00 && 
               byte(0x004B0A) == 0x00 && byte(0x005E8A) == 0x00 && byte(0x00854C) == 0x00 && byte(0x013246) == 0x00 &&
@@ -842,21 +846,21 @@ achievement(
     title = "And not just shot, but shot!  And then shot a couple more times!", points = 5,
     description = "In a single session, play as Lupin and hit enemies with gunshots from his Walther P38 a total of 15 times (excludes Survival Mode)",
     id = 358249, badge = "403580",
-    trigger = InGame() && PlayingAsLupin() && measured(tally(15, EnemiesHitInThisFrameByGun(animation_gun_lupin)), PlayingAsLupin(), "raw")
+    trigger = PauseIfNotInGame() && PlayingAsLupin() && measured(tally(15, EnemiesHitInThisFrameByGun(animation_gun_lupin)))
 )
 
 achievement(
     title = "Show's over, eat lead", points = 5,
     description = "In a single session, play as Jigen and hit enemies with gunshots from his revolver a total of 15 times (excludes Survival Mode)",
     id = 358251, badge = "403582",
-    trigger = InGame() && PlayingAsJigen() && measured(tally(15, EnemiesHitInThisFrameByGun(animation_gun_jigen)), PlayingAsJigen() || PlayerCostume() == 0x10, "raw")
+    trigger = PauseIfNotInGame() && PlayingAsJigen() && measured(tally(15, EnemiesHitInThisFrameByGun(animation_gun_jigen)))
 )
 
 achievement(
     title = "Once again, I've cut another worthless object", points = 5,
     description = "In a single session, play as Goemon and hit enemies with the Zantetsuken's blade a total of 15 times (excludes Survival Mode)",
     id = 359063, badge = "404479",
-    trigger = InGame() && PlayingAsGoemon() && measured(tally(15, EnemiesHitInThisFrameByZantetsuken()), PlayingAsGoemon() || PlayerCostume() == 0x10, "raw")
+    trigger = PauseIfNotInGame() && PlayingAsGoemon() && measured(tally(15, EnemiesHitInThisFrameByZantetsuken()), always_true())
 )
 
 achievement(
