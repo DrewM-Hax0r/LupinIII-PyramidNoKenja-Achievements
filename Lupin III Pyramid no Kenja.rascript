@@ -607,6 +607,11 @@ function ResetIfTimeExceeds(frame_time) => never(repeated(frame_time, Progressio
 
 function ResetIfTimeSpentInLevelExceeds(frame_time, level_id) => never(repeated(frame_time, LevelID() == level_id))
 
+function ItemPickedUp(item_ref) {
+    item_val = dword(item_ref)
+    return once(prev(item_val) > 0x00000000 && item_val == 0x00000000)
+}
+
 // --------------------
 // --- Achievements ---
 // --------------------
@@ -676,7 +681,7 @@ achievement(
 )
 
 achievement(
-    title = "Better not be those 3 hour tours you hear about on Nick at Night", points = 4,
+    title = "One of those three hour tours you hear about on Nick At Nite", points = 4,
     description = "Clear Level 10: Artificial Island on Normal difficulty or higher",
     id = 354497, badge = "399421", published = "9/9/2023 12:16:05 AM", modified = "9/16/2023 8:18:23 PM",
     trigger = ClearedLevel(normal_difficulty, level_10_1, results_level_10)
@@ -905,28 +910,28 @@ achievement(
 
 achievement(
     title = "The guy's possessed, he could probably bench press Shaq", points = 10,
-    description = "Clear Survival Mode as Lupin in less than 20 minutes on Hard difficulty",
+    description = "Clear Survival Mode as Lupin in less than 25 minutes on Hard difficulty",
     id = 360746, badge = "406222",
     trigger = InSurvivalMode() && never(SurvivalModeTimer() == 0x00) && never(SurvivalModePlayerHealth() == 0x00) &&
-              GameDifficulty() == hard_difficulty && PlayingAsLupin() && never(SurvivalModeTimer() >= 24000) && once(prev(SurvivalModeTimer()) == 0 && SurvivalModeTimer() == 1) &&
+              GameDifficulty() == hard_difficulty && PlayingAsLupin() && never(SurvivalModeTimer() >= 30000) && once(prev(SurvivalModeTimer()) == 0 && SurvivalModeTimer() == 1) &&
               trigger_when(once(prev(SurvivalModeRound()) == 0x01) && once(prev(SurvivalModeRound()) == 0x3A) && SurvivalModeRound() == 0x3B && SurvivalModeEnemyCount() == 0x00)
 )
 
 achievement(
     title = "Gettin' Jigen with it", points = 10,
-    description = "Clear Survival Mode as Jigen in less than 5 minutes on Easy difficulty",
+    description = "Clear Survival Mode as Jigen in less than 7 minutes on Easy difficulty",
     id = 360728, badge = "406212",
     trigger = InSurvivalMode() && never(SurvivalModeTimer() == 0x00) && never(SurvivalModePlayerHealth() == 0x00) &&
-              GameDifficulty() == easy_difficulty && PlayingAsJigen() && never(SurvivalModeTimer() >= 6000) && once(prev(SurvivalModeTimer()) == 0 && SurvivalModeTimer() == 1) &&
+              GameDifficulty() == easy_difficulty && PlayingAsJigen() && never(SurvivalModeTimer() >= 8400) && once(prev(SurvivalModeTimer()) == 0 && SurvivalModeTimer() == 1) &&
               trigger_when(once(prev(SurvivalModeRound()) == 0x01) && once(prev(SurvivalModeRound()) == 0x26) && SurvivalModeRound() == 0x27 && SurvivalModeEnemyCount() == 0x00)
 )
 
 achievement(
-    title = "A 10-minute egg must boil for 10 minutes", points = 10,
-    description = "Clear Survival Mode as Goemon in less than 10 minutes on Normal difficulty",
+    title = "It's like a letter-opener with balls, this Zantetsu thing!", points = 10,
+    description = "Clear Survival Mode as Goemon in less than 15 minutes on Normal difficulty",
     id = 346458, badge = "391912", published = "8/20/2023 5:16:30 PM", modified = "9/9/2023 12:56:28 AM",
     trigger = InSurvivalMode() && never(SurvivalModeTimer() == 0x00) && never(SurvivalModePlayerHealth() == 0x00) &&
-              GameDifficulty() == normal_difficulty && PlayingAsGoemon() && never(SurvivalModeTimer() >= 12000) && once(prev(SurvivalModeTimer()) == 0 && SurvivalModeTimer() == 1) &&
+              GameDifficulty() == normal_difficulty && PlayingAsGoemon() && never(SurvivalModeTimer() >= 18000) && once(prev(SurvivalModeTimer()) == 0 && SurvivalModeTimer() == 1) &&
               trigger_when(once(prev(SurvivalModeRound()) == 0x01) && once(prev(SurvivalModeRound()) == 0x26) && SurvivalModeRound() == 0x27 && SurvivalModeEnemyCount() == 0x00)
 )
 
@@ -1010,6 +1015,15 @@ achievement(
     id = 345747, badge = "407707", published = "8/17/2023 2:11:34 AM", modified = "8/26/2023 10:25:52 PM",
     trigger = InGame() && PlayingAsZenigata() && never(LevelID() != level_12) && never(prior(PlayerHP()) == 0x00) &&
               PlayerHP() == 0x00 && PlayerAnimationSet() == 0x07
+)
+
+achievement(
+    title = "A three-minute egg must boil for three minutes", points = 5,
+    description = "Play as Goemon and collect all 6 items in less than 3 minutes in Level 3",
+    id = 364399, badge = "410034",
+    trigger = InGame() && PlayingAsGoemon() && never(LevelID() != level_3) && once(PlayerHP() == 0x10) && StartOfLevel() && never(PlayerHP() == 0x00) &&
+              ResetIfTimeSpentInLevelExceeds(Seconds(180), level_3) && unless(GamePaused() > 0x00) &&
+              trigger_when(ItemPickedUp(0x1B3B64) && ItemPickedUp(0x1B3B6C) && ItemPickedUp(0x1B3B70) && ItemPickedUp(0x1B3B74) && ItemPickedUp(0x1B3B78) && ItemPickedUp(0x1B3B7C))
 )
 
 // --------------------
