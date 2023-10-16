@@ -872,21 +872,21 @@ achievement(
     title = "And not just shot, but shot!  And then shot a couple more times!", points = 5,
     description = "In a single session, play as Lupin and hit enemies with gunshots from his Walther P38 a total of 15 times (excludes Survival Mode)",
     id = 358249, badge = "403580",
-    trigger = PauseIfNotInGame() && PlayingAsLupin() && measured(tally(15, EnemiesHitInThisFrameByGun(animation_gun_lupin)))
+    trigger = PauseIfNotInGame() && never(!PlayingAsLupin()) && measured(tally(15, EnemiesHitInThisFrameByGun(animation_gun_lupin)), always_true())
 )
 
 achievement(
     title = "Show's over, eat lead", points = 5,
     description = "In a single session, play as Jigen and hit enemies with gunshots from his revolver a total of 15 times (excludes Survival Mode)",
     id = 358251, badge = "403582",
-    trigger = PauseIfNotInGame() && PlayingAsJigen() && measured(tally(15, EnemiesHitInThisFrameByGun(animation_gun_jigen)))
+    trigger = PauseIfNotInGame() && never(!PlayingAsJigen()) && measured(tally(15, EnemiesHitInThisFrameByGun(animation_gun_jigen)), always_true())
 )
 
 achievement(
     title = "Once again, I've cut another worthless object", points = 5,
     description = "In a single session, play as Goemon and hit enemies with the Zantetsuken's blade a total of 15 times (excludes Survival Mode)",
     id = 359063, badge = "404479",
-    trigger = PauseIfNotInGame() && PlayingAsGoemon() && measured(tally(15, EnemiesHitInThisFrameByZantetsuken()), always_true())
+    trigger = PauseIfNotInGame() && never(!PlayingAsGoemon()) && measured(tally(15, EnemiesHitInThisFrameByZantetsuken()), always_true())
 )
 
 achievement(
