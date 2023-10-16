@@ -197,13 +197,28 @@ function SurvivalModePlayerHealth() => byte(0x1955A1)
 //          0x04 = Puzzle solved
 function Level9PuzzleDoorState() => byte(0x19F3BD)
 
+// $19F89D: [8-bit] Current number of land mines held by the player
+function PlayerHeldLandMines() => byte(0x19F89D)
+
+// $19F89F: [8-bit] Current number of flash grenades held by the player
+function PlayerHeldFlashGrenades() => byte(0x19F89F)
+
 // $19F8A1: [8-bit] Whether or not the player currently has the rubber boots
 //          0x00 = Does not have rubber boots
 //          0x01 = Has rubber boots
 function PlayerRubberBootsFlag() => byte(0x19F8A1)
 
+// $19F8A3: [8-bit] Current number of disguise items currently held by the player
+function PlayerHeldDisguises() => byte(0x19F8A3)
+
+// $19F8A6: [8-bit] Current ammo for player's gun
+function PlayerHeldSpecialAttackAmmo() => byte(0x19F8A6)
+
 // $19F8A8: [8-bit] Current number of gold healing items held by the player
 function PlayerHeldGoldHealItems() => byte(0x19F8A8)
+
+// $19F8A9: [8-bit] Current number of blue healing items held by the player
+function PlayerHeldBlueHealItems() => byte(0x19F8A9)
 
 // $19FC80: [8-bit] Current round in survival mode (0 based)
 function SurvivalModeRound() => byte(0x19FC80)
@@ -607,9 +622,15 @@ function ResetIfTimeExceeds(frame_time) => never(repeated(frame_time, Progressio
 
 function ResetIfTimeSpentInLevelExceeds(frame_time, level_id) => never(repeated(frame_time, LevelID() == level_id))
 
+function ResetIfTimeAfterFirstItemUseExceeds(frame_time) => never(repeated(frame_time, GameState() == 0x12 && once(UsedItem(PlayerHeldLandMines()) || UsedItem(PlayerHeldFlashGrenades()) || UsedItem(PlayerHeldDisguises()) || UsedItem(PlayerHeldSpecialAttackAmmo()) || UsedItem(PlayerHeldGoldHealItems()) || UsedItem(PlayerHeldBlueHealItems()))))
+
 function ItemPickedUp(item_ref) {
     item_val = dword(item_ref)
     return once(prev(item_val) > 0x00000000 && item_val == 0x00000000)
+}
+
+function UsedItem(player_held_item) {
+    return prev(player_held_item) > player_held_item
 }
 
 // --------------------
@@ -1024,6 +1045,33 @@ achievement(
     trigger = InGame() && PlayingAsGoemon() && never(LevelID() != level_3) && once(PlayerHP() == 0x10) && StartOfLevel() && never(PlayerHP() == 0x00) &&
               ResetIfTimeSpentInLevelExceeds(Seconds(180), level_3) && unless(GamePaused() > 0x00) &&
               trigger_when(ItemPickedUp(0x1B3B64) && ItemPickedUp(0x1B3B6C) && ItemPickedUp(0x1B3B70) && ItemPickedUp(0x1B3B74) && ItemPickedUp(0x1B3B78) && ItemPickedUp(0x1B3B7C))
+)
+
+achievement(
+    title = "Lemme check my wallet", points = 5,
+    description = "Use 3 different items from your inventory within a span of 5 seconds",
+    id = 364434, badge = "410047",
+    trigger = InGame() && never(PlayerHP() == 0x00) && ResetIfTimeAfterFirstItemUseExceeds(Seconds(5)) && unless(GamePaused() > 0x00) &&
+              ((once(UsedItem(PlayerHeldLandMines())) && once(UsedItem(PlayerHeldFlashGrenades())) && once(UsedItem(PlayerHeldDisguises()))) ||
+              (once(UsedItem(PlayerHeldLandMines())) && once(UsedItem(PlayerHeldFlashGrenades())) && once(UsedItem(PlayerHeldSpecialAttackAmmo()))) ||
+              (once(UsedItem(PlayerHeldLandMines())) && once(UsedItem(PlayerHeldFlashGrenades())) && once(UsedItem(PlayerHeldBlueHealItems()))) ||
+              (once(UsedItem(PlayerHeldLandMines())) && once(UsedItem(PlayerHeldFlashGrenades())) && once(UsedItem(PlayerHeldGoldHealItems()))) ||
+              (once(UsedItem(PlayerHeldLandMines())) && once(UsedItem(PlayerHeldDisguises())) && once(UsedItem(PlayerHeldSpecialAttackAmmo()))) ||
+              (once(UsedItem(PlayerHeldLandMines())) && once(UsedItem(PlayerHeldDisguises())) && once(UsedItem(PlayerHeldBlueHealItems()))) ||
+              (once(UsedItem(PlayerHeldLandMines())) && once(UsedItem(PlayerHeldDisguises())) && once(UsedItem(PlayerHeldGoldHealItems()))) ||
+              (once(UsedItem(PlayerHeldLandMines())) && once(UsedItem(PlayerHeldSpecialAttackAmmo())) && once(UsedItem(PlayerHeldBlueHealItems()))) ||
+              (once(UsedItem(PlayerHeldLandMines())) && once(UsedItem(PlayerHeldSpecialAttackAmmo())) && once(UsedItem(PlayerHeldGoldHealItems()))) ||
+              (once(UsedItem(PlayerHeldLandMines())) && once(UsedItem(PlayerHeldBlueHealItems())) && once(UsedItem(PlayerHeldGoldHealItems()))) ||
+              (once(UsedItem(PlayerHeldFlashGrenades())) && once(UsedItem(PlayerHeldDisguises())) && once(UsedItem(PlayerHeldSpecialAttackAmmo()))) ||
+              (once(UsedItem(PlayerHeldFlashGrenades())) && once(UsedItem(PlayerHeldDisguises())) && once(UsedItem(PlayerHeldBlueHealItems()))) ||
+              (once(UsedItem(PlayerHeldFlashGrenades())) && once(UsedItem(PlayerHeldDisguises())) && once(UsedItem(PlayerHeldGoldHealItems()))) ||
+              (once(UsedItem(PlayerHeldFlashGrenades())) && once(UsedItem(PlayerHeldSpecialAttackAmmo())) && once(UsedItem(PlayerHeldBlueHealItems()))) ||
+              (once(UsedItem(PlayerHeldFlashGrenades())) && once(UsedItem(PlayerHeldSpecialAttackAmmo())) && once(UsedItem(PlayerHeldGoldHealItems()))) ||
+              (once(UsedItem(PlayerHeldFlashGrenades())) && once(UsedItem(PlayerHeldBlueHealItems())) && once(UsedItem(PlayerHeldGoldHealItems()))) ||
+              (once(UsedItem(PlayerHeldDisguises())) && once(UsedItem(PlayerHeldSpecialAttackAmmo())) && once(UsedItem(PlayerHeldBlueHealItems()))) ||
+              (once(UsedItem(PlayerHeldDisguises())) && once(UsedItem(PlayerHeldSpecialAttackAmmo())) && once(UsedItem(PlayerHeldGoldHealItems()))) ||
+              (once(UsedItem(PlayerHeldDisguises())) && once(UsedItem(PlayerHeldBlueHealItems())) && once(UsedItem(PlayerHeldGoldHealItems()))) ||
+              (once(UsedItem(PlayerHeldSpecialAttackAmmo())) && once(UsedItem(PlayerHeldBlueHealItems())) && once(UsedItem(PlayerHeldGoldHealItems()))))
 )
 
 // --------------------
