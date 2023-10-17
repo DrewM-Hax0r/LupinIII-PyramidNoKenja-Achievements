@@ -769,11 +769,11 @@ achievement(
     title = "Punks thought they were dealing with amateurs", points = 5,
     description = "Climb to the top of the mountain without ever falling back down to a previous section in Level 4",
     id = 354689, badge = "399668", published = "9/9/2023 10:41:36 PM", modified = "9/11/2023 10:53:38 PM",
-    trigger = InGame() && never(LevelID() != level_4_1) && never(PlayerHP() == 0) && StartOfLevel() &&
+    trigger = InGame() && never(LevelID() != level_4_1) && never(PlayerHP() == 0) && unless(PlayerZLocation() < 0x0100) && StartOfLevel() && once(PlayerZLocation() > 0xFFF0) 
               OneWayZPositionCheckpointPassed(0xFFB2, 0xFFCD) && OneWayZPositionCheckpointPassed(0xFEFD, 0xFF1C) &&
               OneWayZPositionCheckpointPassed(0xFE9A, 0xFEAB) && OneWayZPositionCheckpointPassed(0xFE0E, 0xFE34) &&
               OneWayZPositionCheckpointPassed(0xFDBB, 0xFDED) &&
-              trigger_when(once(PlayerZLocation() < 0xFD88)) && unless(PlayerZLocation() < 0x10)
+              trigger_when(once(PlayerZLocation() < 0xFD88))
 )
 
 achievement(
