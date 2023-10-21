@@ -197,6 +197,11 @@ function SurvivalModePlayerHealth() => byte(0x1955A1)
 //          0x04 = Puzzle solved
 function Level9PuzzleDoorState() => byte(0x19F3BD)
 
+// $19F7F2: [8-bit] Flag for opening puzzle door in Level 15.2, activates when any of the four doors are opened
+//          0x00 = CLOSED
+//          0x01 = OPEN
+function Level15DoorPuzzleState() => byte(0x19F7F2)
+
 // $19F89D: [8-bit] Current number of land mines held by the player
 function PlayerHeldLandMines() => byte(0x19F89D)
 
@@ -219,6 +224,12 @@ function PlayerHeldGoldHealItems() => byte(0x19F8A8)
 
 // $19F8A9: [8-bit] Current number of blue healing items held by the player
 function PlayerHeldBlueHealItems() => byte(0x19F8A9)
+
+// $19F8AF: [8-bit] Currently selected item in players inventory
+function CurrentlySelectedItem() => byte(0x19F8AF)
+
+// $19FC5E: [8-bit] Number of times spotted by the enemy, in game, updates in real time
+function TimesSpottedByUniqueEnemiesInGame() => byte(0x19FC5E)
 
 // $19FC80: [8-bit] Current round in survival mode (0 based)
 function SurvivalModeRound() => byte(0x19FC80)
@@ -304,6 +315,26 @@ function PlayerHP() => byte(0x1AEC11)
 //          0xfe1c = Final state
 function Level6PillarRollingState() => word(0x1B3C48)
 
+// $1B3C72: [8-bit] Flag for opening puzzle door in Level 15.2 (J Tetromino)
+//          0x00 = OPEN
+//          0x01 = CLOSED
+function Level15DoorPuzzleJTetrominoState() => byte(0x1B3C72)
+
+// $1B3CB2: [8-bit] Flag for opening puzzle door in Level 15.2 (T Tetromino)
+//          0x00 = OPEN
+//          0x01 = CLOSED
+function Level15DoorPuzzleTTetrominoState() => byte(0x1B3CB2)
+
+// $1B3CF2: [8-bit] Flag for opening puzzle door in Level 15.2 (S Tetromino)
+//          0x00 = OPEN
+//          0x01 = CLOSED
+function Level15DoorPuzzleSTetrominoState() => byte(0x1B3CF2)
+
+// $1B3D32: [8-bit] Flag for opening puzzle door in Level 15.2 (O Tetromino)
+//          0x00 = OPEN
+//          0x01 = CLOSED
+function Level15DoorPuzzleOTetrominoState() => byte(0x1B3D32)
+
 // $1B402E: [16-bit] [Level 12] Piston A Timer
 function Level12PistonATimer() => word(0x1B402E)
 
@@ -375,6 +406,7 @@ entity_state_alert = 0x0A
 entity_type_offset = 0x47
 entity_knock_out_by_player_offset = 0x6B
 entity_animation_set_offset = 0x6E
+entity_activation_offset = 0x8C
 entity_damaged_by_player_count_offset = 0x92 // This offset points to a value that increases each time the player damages this entity, does not increase if the entity is damaged from another source besides the player
 
 all_entity_slots = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18]
@@ -391,6 +423,13 @@ animation_gun_jigen = 0x54
 animation_gun_dive = 0x61
 animation_zantetsuken_goemon = 0x51
 animation_zantetsuken_running_goemon = 0x5A
+
+selected_item_land_mine = 0x00
+selected_item_flash_grenade = 0x02
+selected_item_disguise = 0x06
+selected_item_ammo = 0x0B
+selected_item_blue_heal = 0x0C
+selected_item_gold_heal = 0x0D
 
 // -----------------------
 // --- Logic Functions ---
@@ -457,6 +496,8 @@ function EntityAnimationSet(entity_address) => byte(entity_address + entity_anim
 
 function EntityState(entity_address) => byte(entity_address + entity_state_offset)
 
+function EntityActivation(entity_address) => byte(entity_address + entity_activation_offset)
+
 function IsEntityAlert(entity_address) {
     return EntityState(entity_address) == entity_state_alert
 }
@@ -499,7 +540,7 @@ function IsPlayerDamagingAnyPartner() {
     condition_met = false
     for slot in all_entity_slots {
         address = EntityAddress(slot)
-        condition_met = condition_met || (EntityExists(address) && IsEntityAPartner(address) && IsPlayerDamagingEntity(address))
+        condition_met = condition_met || (EntityExists(address) && IsEntityAPartner(address) && EntityActivation(address) != 0x23 && IsPlayerDamagingEntity(address))
     }
     return condition_met
 }
@@ -606,6 +647,9 @@ function PistonTrapReset(timer) {
 // Detects the moment when the player begins playing a level, either by first load into it or retry after having previously died
 function StartOfLevel() => once(prev(GameState()) == 0x00 && GameState() == 0x12) || once(prev(PlayerHP()) == 0x00 && PlayerHP() == 0x10)
 
+function RollingBoulderInDefaultStateLevel4() => byte(0x0068B1) == 0x00
+function StartOfLevel4() => once(prev(GameState()) == 0x00 && GameState() == 0x12) || once(prev(PlayerHP()) == 0x00 && PlayerHP() == 0x10) || once(RollingBoulderInDefaultStateLevel4())
+
 function Level2AllGlassBroken() => byte(0x0047F6) == 0x00 && byte(0x0057FE) == 0x00 && byte(0x0049AE) == 0x00 && 
               byte(0x004B0A) == 0x00 && byte(0x005E8A) == 0x00 && byte(0x00854C) == 0x00 && byte(0x013246) == 0x00 &&
               byte(0x004ED4) == 0x00 && byte(0x008554) == 0x00 && byte(0x009CFC) == 0x00 && byte(0x011E3E) == 0x00 &&
@@ -616,7 +660,7 @@ function Level5KeyCollected() => once(once(prev(Level5KeyFlag()) == 0x00) && Lev
 function Level15StolePinkDiamond() => LevelID() == level_15_3 && PlayerAnimationSet() == 0x28 && PlayerYLocation() > 0x0328
 
 // Once the player has gone higher up than the provided activate_at position, the achivement will reset if the player ever drops below the provided reset_threshold position
-function OneWayZPositionCheckpointPassed(activate_at, reset_threshold) => never((once(PlayerZLocation() <= activate_at) && PlayerZLocation() >= reset_threshold))
+function OneWayZPositionCheckpointPassed(activate_at, reset_threshold) => never((once(PlayerZLocation() > 0x0100 && PlayerZLocation() <= activate_at) && PlayerZLocation() >= reset_threshold))
 
 function ResetIfTimeExceeds(frame_time) => never(repeated(frame_time, ProgressionFlag() > 0x01))
 
@@ -631,6 +675,30 @@ function ItemPickedUp(item_ref) {
 
 function UsedItem(player_held_item) {
     return prev(player_held_item) > player_held_item
+}
+
+function UsedLandMine() {
+    return CurrentlySelectedItem() == selected_item_land_mine && UsedItem(PlayerHeldLandMines())
+}
+
+function UsedFlashGrenade() {
+    return CurrentlySelectedItem() == selected_item_flash_grenade && UsedItem(PlayerHeldFlashGrenades())
+}
+
+function UsedDisguise() {
+    return CurrentlySelectedItem() == selected_item_disguise && UsedItem(PlayerHeldDisguises())
+}
+
+function UsedSpecialAttackAmmo() {
+    return CurrentlySelectedItem() == selected_item_ammo && UsedItem(PlayerHeldSpecialAttackAmmo())
+}
+
+function UsedBlueHealItem() {
+    return CurrentlySelectedItem() == selected_item_blue_heal && UsedItem(PlayerHeldBlueHealItems())
+}
+
+function UsedGoldHealItem() {
+    return CurrentlySelectedItem() == selected_item_gold_heal && UsedItem(PlayerHeldGoldHealItems())
 }
 
 // --------------------
@@ -752,15 +820,15 @@ achievement(
 )
 
 achievement(
-    title = "A string of crimes longer than that chin of yours", points = 2,
+    title = "A string of crimes longer than that chin of yours", points = 3,
     description = "Break every pane of glass in Level 2",
-    id = 346839, badge = "392203", published = "8/22/2023 2:20:27 AM", modified = "8/22/2023 11:49:44 PM",
+    id = 346839, badge = "411230", published = "8/22/2023 2:20:27 AM", modified = "8/22/2023 11:49:44 PM",
     trigger = InGame() && never(PlayerHP() == 0x00) && never(LevelID() != level_2) && Level2AllGlassBroken()
 )
 
 achievement(
     title = "Ya any good at darts?", points = 4,
-    description = "Alert a guard and then lure them into getting knocked out with an arrow trap in Level 3",
+    description = "Alert an enemy and then lure them into getting knocked out with an arrow trap in Level 3",
     id = 357455, badge = "402676", published = "9/21/2023 10:54:01 PM", modified = "9/21/2023 10:54:01 PM",
     trigger = InGame() && never(PlayerHP() == 0x00) && never(LevelID() != level_3) && trigger_when(IsAnyEnemyAlertAndHitWithArrowTrapLevel3())
 )
@@ -769,11 +837,11 @@ achievement(
     title = "Punks thought they were dealing with amateurs", points = 5,
     description = "Climb to the top of the mountain without ever falling back down to a previous section in Level 4",
     id = 354689, badge = "399668", published = "9/9/2023 10:41:36 PM", modified = "9/11/2023 10:53:38 PM",
-    trigger = InGame() && never(LevelID() != level_4_1) && never(PlayerHP() == 0) && unless(PlayerZLocation() < 0x0100) && StartOfLevel() && once(PlayerZLocation() > 0xFFF0) &&
+    trigger = InGame() && never(LevelID() != level_4_1) && never(PlayerHP() == 0) && StartOfLevel4() && once(PlayerZLocation() > 0xFFF0) &&
               OneWayZPositionCheckpointPassed(0xFFB2, 0xFFCD) && OneWayZPositionCheckpointPassed(0xFEFD, 0xFF1C) &&
               OneWayZPositionCheckpointPassed(0xFE9A, 0xFEAB) && OneWayZPositionCheckpointPassed(0xFE0E, 0xFE34) &&
               OneWayZPositionCheckpointPassed(0xFDBB, 0xFDED) &&
-              trigger_when(once(PlayerZLocation() < 0xFD88))
+              trigger_when(PlayerZLocation() > 0x0100 && PlayerZLocation() < 0xFD88)
 )
 
 achievement(
@@ -786,7 +854,7 @@ achievement(
 
 achievement(
     title = "Holy Humpty Mc-Dumpty", points = 3,
-    description = "Knock out an unaware guard with the pillar trap in Level 6",
+    description = "Knock out an unaware enemy with the pillar trap in Level 6",
     id = 346234, badge = "391911", published = "8/19/2023 2:17:29 AM", modified = "9/19/2023 10:25:38 PM",
     trigger = InGame() && never(PlayerHP() == 0x00) && never(LevelID() != level_6) && never(EntityKnockOutByPlayerState(EntityAddress(2)) == 0x00) &&
               never(Level6PillarRollingState() == 65426) && never(Level6PillarRollingState() == 65052) && EntityKnockedOutByPlayer(EntityAddress(2)) &&
@@ -802,9 +870,9 @@ achievement(
 )
 
 achievement(
-    title = "I'm good through, well, pretty much the rest of my friggin' life", points = 3,
+    title = "I'm good through, well, pretty much the rest of my friggin' life", points = 5,
     description = "Stay on the conveyor belt without falling off for 3 minutes straight in Level 8",
-    id = 346499, badge = "391957", published = "8/21/2023 1:08:47 AM", modified = "9/9/2023 11:54:39 PM",
+    id = 346499, badge = "411236", published = "8/21/2023 1:08:47 AM", modified = "9/9/2023 11:54:39 PM",
     trigger = InGame() && never(PlayerHP() == 0) && LevelID() == level_8 &&
               unless(GamePaused() > 0) && never((PlayerXLocation() > 607 || PlayerXLocation() < 571)) && 
               never((PlayerYLocation() < 743 || PlayerYLocation() > 1139)) && never(PlayerZLocation() > 65498) && 
@@ -821,7 +889,7 @@ achievement(
 
 achievement(
     title = "Eins!  Zwei!  Drei!  ...And whatever the hell four is in German!", points = 10,
-    description = "Drop all guards into the water in a single run of the level in Level 10",
+    description = "Drop all enemies into the water in a single run of the level in Level 10",
     id = 357897, badge = "403119", published = "9/24/2023 2:11:50 AM", modified = "9/24/2023 2:13:29 AM",
     trigger = InGame() && never(LevelID() != level_10_1 && LevelID() != level_10_2) && never(PlayerHP() == 0x00) &&
               trigger_when(AreAllTreasureRoomEnemiesInWaterLevel10() && AreAllMainAreaEnemiesInWaterLevel10())
@@ -846,7 +914,7 @@ achievement(
 
 achievement(
     title = "He thrives on chaos!", points = 10,
-    description = "Have every single guard in an alert state at the same time after collecting the treasure in Level 13",
+    description = "Have every single enemy in an alert state at the same time after collecting the treasure in Level 13",
     id = 357899, badge = "403121", published = "9/24/2023 3:08:44 AM", modified = "9/24/2023 3:08:44 AM",
     trigger = InGame() && never(LevelID() != level_13) && never(PlayerHP() == 0x00) && never(!IsTreasureCollected()) &&
               never(IsAnyEnemyHealthDepleted()) && trigger_when(AreAllEnemiesAlert())
@@ -854,18 +922,21 @@ achievement(
 
 achievement(
     title = "Don't turn around!", points = 10,
-    description = "Knock out 5 guards after using a single flash grenade before it's effect wears off in Level 14",
+    description = "Knock out 5 enemies after using a single flash grenade before it's effect wears off in Level 14",
     id = 358173, badge = "403382",
     trigger = InGame() && never(LevelID() != level_14) && never(PlayerHP() == 0x00) && never(FlashGrenadeTimer() == 0x00) &&
               never(prev(FlashGrenadeTimer()) < FlashGrenadeTimer()) && tally(5, EnemiesKnockedOutInThisFrame())
 )
 
 achievement(
-    title = "I bet they don't have problems with drunk drivers around here", points = 10,
-    description = "Play on Hyper difficulty and reach the control room after crossing the moving bridge in Level 15",
-    id = 358195, badge = "403422",
-    trigger = InGame() && never(LevelID() != level_15_1 && LevelID() != level_15_transition && LevelID() != level_15_2) && GameDifficultyIs(hyper_difficulty) &&
-              once(LevelID() == level_15_1) && trigger_when(LevelID() == level_15_2)
+    title = "They just helped us help ourselves", points = 5,
+    description = "Open all four tetromino puzzle doors in a single run of the level in Level 15",
+    id = 366004, badge = "412051",
+    trigger = InGame() && never(LevelID() != level_15_2) && never(PlayerHP() == 0x00) &&
+              trigger_when(once(Level15DoorPuzzleState() == 0x01 && Level15DoorPuzzleJTetrominoState() == 0x00) &&
+              once(Level15DoorPuzzleState() == 0x01 && Level15DoorPuzzleTTetrominoState() == 0x00) &&
+              once(Level15DoorPuzzleState() == 0x01 && Level15DoorPuzzleSTetrominoState() == 0x00) &&
+              once(Level15DoorPuzzleState() == 0x01 && Level15DoorPuzzleOTetrominoState() == 0x00))
 )
 
 achievement(
@@ -916,17 +987,17 @@ achievement(
 )
 
 achievement(
-    title = "I just love it when our victims are punctual", points = 3,
-    description = "In a single Survival Mode run, place a total of 10 land mines",
-    id = 361126, badge = "406558",
-    trigger = InSurvivalMode() && never(SurvivalModePlayerHealth() == 0x00) && repeated(10, prev(SurvivalModeLandMinesHeld()) > SurvivalModeLandMinesHeld())
+    title = "I just love it when our victims are punctual", points = 5,
+    description = "In a single Survival Mode run, place a total of 5 land mines",
+    id = 361126, badge = "411250",
+    trigger = InSurvivalMode() && never(SurvivalModePlayerHealth() == 0x00) && repeated(5, prev(SurvivalModeLandMinesHeld()) > SurvivalModeLandMinesHeld())
 )
 
 achievement(
-    title = "It's torture!  Get me some asprin!", points = 3,
-    description = "In a single Survival Mode run, use a total of 10 flash grenades",
-    id = 361125, badge = "406557",
-    trigger = InSurvivalMode() && never(SurvivalModePlayerHealth() == 0x00) && repeated(10, prev(SurvivalModeFlashGrenadesHeld()) > SurvivalModeFlashGrenadesHeld())
+    title = "It's torture!  Get me some asprin!", points = 5,
+    description = "In a single Survival Mode run, use a total of 5 flash grenades",
+    id = 361125, badge = "411251",
+    trigger = InSurvivalMode() && never(SurvivalModePlayerHealth() == 0x00) && repeated(5, prev(SurvivalModeFlashGrenadesHeld()) > SurvivalModeFlashGrenadesHeld())
 )
 
 achievement(
@@ -995,9 +1066,9 @@ achievement(
 )
 
 achievement(
-    title = "Floating through the air like pixies", points = 1,
+    title = "Floating through the air like pixies", points = 2,
     description = "Avoid falling by swimming through the air",
-    id = 346465, badge = "391908", published = "8/20/2023 6:52:10 PM", modified = "9/19/2023 11:10:34 PM",
+    id = 346465, badge = "411253", published = "8/20/2023 6:52:10 PM", modified = "9/19/2023 11:10:34 PM",
     trigger = InGame() && never((prev(PlayerAnimationSet()) == 86 || prev(PlayerAnimationSet()) == 83 ||
                prev(PlayerAnimationSet()) == 0x5F || prev(PlayerAnimationSet()) == 0x00)) && once(PlayerAnimationSet() == 0x16) &&
               ((prev(PlayerAnimationSet()) == 0x11 && (PlayerAnimationSet() == 0x56 || PlayerAnimationSet() == 0x53 || PlayerAnimationSet() == 0x5F || PlayerAnimationSet() == 0x00)) ||
@@ -1017,9 +1088,9 @@ achievement(
 )
 
 achievement(
-    title = "Friggin' Lupin", points = 1,
+    title = "Friggin' Lupin", points = 2,
     description = "Play as Lupin and land a punch on one of your partners",
-    id = 354507, badge = "399500", published = "9/9/2023 2:31:26 AM", modified = "9/15/2023 12:56:47 AM",
+    id = 354507, badge = "411255", published = "9/9/2023 2:31:26 AM", modified = "9/15/2023 12:56:47 AM",
     trigger = InGame() && PlayingAsLupin() && PlayerIsPunching() && IsPlayerDamagingAnyPartner()
 )
 
@@ -1049,29 +1120,54 @@ achievement(
 
 achievement(
     title = "Lemme check my wallet", points = 5,
-    description = "Use 3 different items from your inventory within a span of 5 seconds",
-    id = 364434, badge = "410047",
-    trigger = InGame() && never(PlayerHP() == 0x00) && ResetIfTimeAfterFirstItemUseExceeds(Seconds(5)) && unless(GamePaused() > 0x00) &&
-              ((once(UsedItem(PlayerHeldLandMines())) && once(UsedItem(PlayerHeldFlashGrenades())) && once(UsedItem(PlayerHeldDisguises()))) ||
-              (once(UsedItem(PlayerHeldLandMines())) && once(UsedItem(PlayerHeldFlashGrenades())) && once(UsedItem(PlayerHeldSpecialAttackAmmo()))) ||
-              (once(UsedItem(PlayerHeldLandMines())) && once(UsedItem(PlayerHeldFlashGrenades())) && once(UsedItem(PlayerHeldBlueHealItems()))) ||
-              (once(UsedItem(PlayerHeldLandMines())) && once(UsedItem(PlayerHeldFlashGrenades())) && once(UsedItem(PlayerHeldGoldHealItems()))) ||
-              (once(UsedItem(PlayerHeldLandMines())) && once(UsedItem(PlayerHeldDisguises())) && once(UsedItem(PlayerHeldSpecialAttackAmmo()))) ||
-              (once(UsedItem(PlayerHeldLandMines())) && once(UsedItem(PlayerHeldDisguises())) && once(UsedItem(PlayerHeldBlueHealItems()))) ||
-              (once(UsedItem(PlayerHeldLandMines())) && once(UsedItem(PlayerHeldDisguises())) && once(UsedItem(PlayerHeldGoldHealItems()))) ||
-              (once(UsedItem(PlayerHeldLandMines())) && once(UsedItem(PlayerHeldSpecialAttackAmmo())) && once(UsedItem(PlayerHeldBlueHealItems()))) ||
-              (once(UsedItem(PlayerHeldLandMines())) && once(UsedItem(PlayerHeldSpecialAttackAmmo())) && once(UsedItem(PlayerHeldGoldHealItems()))) ||
-              (once(UsedItem(PlayerHeldLandMines())) && once(UsedItem(PlayerHeldBlueHealItems())) && once(UsedItem(PlayerHeldGoldHealItems()))) ||
-              (once(UsedItem(PlayerHeldFlashGrenades())) && once(UsedItem(PlayerHeldDisguises())) && once(UsedItem(PlayerHeldSpecialAttackAmmo()))) ||
-              (once(UsedItem(PlayerHeldFlashGrenades())) && once(UsedItem(PlayerHeldDisguises())) && once(UsedItem(PlayerHeldBlueHealItems()))) ||
-              (once(UsedItem(PlayerHeldFlashGrenades())) && once(UsedItem(PlayerHeldDisguises())) && once(UsedItem(PlayerHeldGoldHealItems()))) ||
-              (once(UsedItem(PlayerHeldFlashGrenades())) && once(UsedItem(PlayerHeldSpecialAttackAmmo())) && once(UsedItem(PlayerHeldBlueHealItems()))) ||
-              (once(UsedItem(PlayerHeldFlashGrenades())) && once(UsedItem(PlayerHeldSpecialAttackAmmo())) && once(UsedItem(PlayerHeldGoldHealItems()))) ||
-              (once(UsedItem(PlayerHeldFlashGrenades())) && once(UsedItem(PlayerHeldBlueHealItems())) && once(UsedItem(PlayerHeldGoldHealItems()))) ||
-              (once(UsedItem(PlayerHeldDisguises())) && once(UsedItem(PlayerHeldSpecialAttackAmmo())) && once(UsedItem(PlayerHeldBlueHealItems()))) ||
-              (once(UsedItem(PlayerHeldDisguises())) && once(UsedItem(PlayerHeldSpecialAttackAmmo())) && once(UsedItem(PlayerHeldGoldHealItems()))) ||
-              (once(UsedItem(PlayerHeldDisguises())) && once(UsedItem(PlayerHeldBlueHealItems())) && once(UsedItem(PlayerHeldGoldHealItems()))) ||
-              (once(UsedItem(PlayerHeldSpecialAttackAmmo())) && once(UsedItem(PlayerHeldBlueHealItems())) && once(UsedItem(PlayerHeldGoldHealItems()))))
+    description = "Use 3 different items from your inventory within a span of 5 seconds (excludes Survival Mode)",
+    id = 364434, badge = "411263",
+    trigger = InGame() && never(PlayerHP() == 0x00) && never(word(0x191358) != 0xe200) && ResetIfTimeAfterFirstItemUseExceeds(Seconds(5)) && unless(GamePaused() > 0x00) &&
+              ((once(UsedLandMine()) && once(UsedFlashGrenade()) && once(UsedDisguise())) ||
+              (once(UsedLandMine()) && once(UsedFlashGrenade()) && once(UsedSpecialAttackAmmo())) ||
+              (once(UsedLandMine()) && once(UsedFlashGrenade()) && once(UsedBlueHealItem())) ||
+              (once(UsedLandMine()) && once(UsedFlashGrenade()) && once(UsedGoldHealItem())) ||
+              (once(UsedLandMine()) && once(UsedDisguise()) && once(UsedSpecialAttackAmmo())) ||
+              (once(UsedLandMine()) && once(UsedDisguise()) && once(UsedBlueHealItem())) ||
+              (once(UsedLandMine()) && once(UsedDisguise()) && once(UsedGoldHealItem())) ||
+              (once(UsedLandMine()) && once(UsedSpecialAttackAmmo()) && once(UsedBlueHealItem())) ||
+              (once(UsedLandMine()) && once(UsedSpecialAttackAmmo()) && once(UsedGoldHealItem())) ||
+              (once(UsedLandMine()) && once(UsedBlueHealItem()) && once(UsedGoldHealItem())) ||
+              (once(UsedFlashGrenade()) && once(UsedDisguise()) && once(UsedSpecialAttackAmmo())) ||
+              (once(UsedFlashGrenade()) && once(UsedDisguise()) && once(UsedBlueHealItem())) ||
+              (once(UsedFlashGrenade()) && once(UsedDisguise()) && once(UsedGoldHealItem())) ||
+              (once(UsedFlashGrenade()) && once(UsedSpecialAttackAmmo()) && once(UsedBlueHealItem())) ||
+              (once(UsedFlashGrenade()) && once(UsedSpecialAttackAmmo()) && once(UsedGoldHealItem())) ||
+              (once(UsedFlashGrenade()) && once(UsedBlueHealItem()) && once(UsedGoldHealItem())) ||
+              (once(UsedDisguise()) && once(UsedSpecialAttackAmmo()) && once(UsedBlueHealItem())) ||
+              (once(UsedDisguise()) && once(UsedSpecialAttackAmmo()) && once(UsedGoldHealItem())) ||
+              (once(UsedDisguise()) && once(UsedBlueHealItem()) && once(UsedGoldHealItem())) ||
+              (once(UsedSpecialAttackAmmo()) && once(UsedBlueHealItem()) && once(UsedGoldHealItem())))
+)
+
+achievement(
+    title = "I would have to say he dug up the treasure and hid it in his ass", points = 5,
+    description = "Play as Goemon and collect the treasure without alerting any of the enemies in Level 4",
+    id = 364778, badge = "410337",
+    trigger = InGame() && PlayingAsGoemon() && never(LevelID() != level_4_1 && LevelID() != level_4_2) && never(PlayerHP() == 0x00) &&
+              never(TimesSpottedByUniqueEnemiesInGame() > 0x00) &&
+              trigger_when(prev(TrasureCollectedLevelFlag()) == 0x00 && TrasureCollectedLevelFlag() == 0x03)
+)
+
+achievement(
+    title = "Now, let's try to end this one like Jaws!", points = 5,
+    description = "Play as Jigen and disarm all of the enemy placed land mines in Level 7",
+    trigger = InGame() && PlayingAsGoemon() && never(LevelID() != level_4_1 && LevelID() != level_4_2) && never(PlayerHP() == 0x00) &&
+              ResetIfTimeSpentInLevelExceeds(Seconds(180), level_3) && unless(GamePaused() > 0x00) &&
+              trigger_when(ItemPickedUp(0x1B3B64) && ItemPickedUp(0x1B3B6C) && ItemPickedUp(0x1B3B70) && ItemPickedUp(0x1B3B74) && ItemPickedUp(0x1B3B78) && ItemPickedUp(0x1B3B7C))
+)
+
+achievement(
+    title = "I bet they don't have problems with drunk drivers around here", points = 10,
+    description = "Reach the control room after crossing the moving bridge in Level 15 on Hyper difficulty",
+    id = 358195, badge = "411243",
+    trigger = InGame() && never(LevelID() != level_15_1 && LevelID() != level_15_transition && LevelID() != level_15_2)  && GameDifficultyIs(hyper_difficulty) &&
+              once(LevelID() == level_15_1) && trigger_when(LevelID() == level_15_2)
 )
 
 // --------------------
