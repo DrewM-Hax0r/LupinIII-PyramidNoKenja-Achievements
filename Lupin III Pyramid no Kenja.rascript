@@ -709,134 +709,134 @@ function UsedGoldHealItem() {
 achievement(
     title = "The Return of Lupin the Third", points = 1,
     description = "Clear Level 1: Pyramid Entrance on Normal difficulty or higher",
-    id = 350710, badge = "395420", published = "8/30/2023 1:49:07 AM", modified = "9/16/2023 8:18:20 PM",
+    id = 350710, badge = "411214", published = "8/30/2023 1:49:07 AM", modified = "10/19/2023 12:52:55 AM",
     trigger = ClearedLevel(normal_difficulty, level_1, results_level_1)
 )
 
 achievement(
-    title = "So this is where Dick Clark lives", points = 1,
+    title = "So This Is Where Dick Clark Lives", points = 1,
     description = "Clear Level 2: Underground Fortress on Normal difficulty or higher",
-    id = 353504, badge = "398245", published = "9/4/2023 10:13:00 PM", modified = "9/16/2023 8:18:20 PM",
+    id = 353504, badge = "411215", published = "9/4/2023 10:13:00 PM", modified = "10/19/2023 12:52:57 AM",
     trigger = ClearedLevel(normal_difficulty, level_2, results_level_2)
 )
 
 achievement(
-    title = "The friggin' grave robbers here had it made", points = 1,
+    title = "The Friggin’ Grave Robbers Here Had It Made", points = 1,
     description = "Clear Level 3: Desert Tower on Normal difficulty or higher",
-    id = 350711, badge = "395421", published = "8/30/2023 1:54:57 AM", modified = "9/16/2023 8:18:21 PM",
+    id = 350711, badge = "411216", published = "8/30/2023 1:54:57 AM", modified = "10/19/2023 12:52:59 AM",
     trigger = ClearedLevel(normal_difficulty, level_3, results_level_3)
 )
 
 achievement(
-    title = "What, are you gonna climb Mt. Everest or something?", points = 2,
+    title = "What, Are You Gonna Climb Mt. Everest or Something?", points = 2,
     description = "Clear Level 4: Mountain Fortress on Normal difficulty or higher",
-    id = 353858, badge = "398628", published = "9/6/2023 1:58:13 AM", modified = "9/16/2023 8:18:21 PM",
+    id = 353858, badge = "411217", published = "9/6/2023 1:58:13 AM", modified = "10/19/2023 12:53:00 AM",
     trigger = ClearedLevel(normal_difficulty, level_4_1, results_level_4)
 )
 
 achievement(
-    title = "Do they replace all those pillars every time someone comes here?", points = 2,
+    title = "Do They Replace All Those Pillars Every Time Someone Comes Here?", points = 2,
     description = "Clear Level 5: Ancient Ruins on Normal difficulty or higher",
-    id = 353859, badge = "398629", published = "9/6/2023 2:06:51 AM", modified = "9/16/2023 8:18:21 PM",
+    id = 353859, badge = "411218", published = "9/6/2023 2:06:51 AM", modified = "10/19/2023 12:53:03 AM",
     trigger = ClearedLevel(normal_difficulty, level_5_1, results_level_5)
 )
 
 achievement(
-    title = "I'd actually rather be in Disneyland", points = 2,
+    title = "I’d Actually Rather Be in Disneyland", points = 2,
     description = "Clear Level 6: Valley Fortress on Normal difficulty or higher",
-    id = 353860, badge = "398630", published = "9/6/2023 2:12:46 AM", modified = "9/16/2023 8:18:22 PM",
+    id = 353860, badge = "411219", published = "9/6/2023 2:12:46 AM", modified = "10/19/2023 12:53:06 AM",
     trigger = ClearedLevel(normal_difficulty, level_6, results_level_6)
 )
 
 achievement(
-    title = "It's time for a round of big bang boomerang", points = 3,
+    title = "It’s Time for a Round of Big Bang Boomerang", points = 3,
     description = "Clear Level 7: Jungle Temple on Normal difficulty or higher",
-    id = 354172, badge = "399086", published = "9/8/2023 12:23:30 AM", modified = "9/16/2023 8:18:22 PM",
+    id = 354172, badge = "411220", published = "9/8/2023 12:23:30 AM", modified = "10/19/2023 12:53:08 AM",
     trigger = ClearedLevel(normal_difficulty, level_7_1, results_level_7)
 )
 
 achievement(
-    title = "I think the jungle's getting to him", points = 3,
+    title = "I Think the Jungle’s Getting to Him", points = 3,
     description = "Clear Level 8: Botanical Research Institute on Normal difficulty or higher",
-    id = 354173, badge = "399087", published = "9/8/2023 12:29:33 AM", modified = "9/16/2023 8:18:22 PM",
+    id = 354173, badge = "411221", published = "9/8/2023 12:29:33 AM", modified = "10/19/2023 12:53:09 AM",
     trigger = ClearedLevel(normal_difficulty, level_8, results_level_8)
 )
 
 achievement(
-    title = "Dammit, this is very mysterious, and I hate mysteries!", points = 3,
+    title = "Dammit, This Is Very Mysterious, and I Hate Mysteries!", points = 3,
     description = "Clear Level 9: Jungle Watchtower on Normal difficulty or higher",
-    id = 354175, badge = "399089", published = "9/8/2023 1:25:54 AM", modified = "9/16/2023 8:18:23 PM",
+    id = 354175, badge = "411222", published = "9/8/2023 1:25:54 AM", modified = "10/19/2023 12:53:10 AM",
     trigger = ClearedLevel(normal_difficulty, level_9_2, results_level_9)
 )
 
 achievement(
-    title = "One of those three hour tours you hear about on Nick At Nite", points = 4,
+    title = "One of Those Three Hour Tours You Hear About on Nick at Nite", points = 4,
     description = "Clear Level 10: Artificial Island on Normal difficulty or higher",
-    id = 354497, badge = "399421", published = "9/9/2023 12:16:05 AM", modified = "9/16/2023 8:18:23 PM",
+    id = 354497, badge = "411223", published = "9/9/2023 12:16:05 AM", modified = "10/19/2023 12:53:11 AM",
     trigger = ClearedLevel(normal_difficulty, level_10_1, results_level_10)
 )
 
 achievement(
-    title = "Breaking in? I prefer to call it \"dropping by\"", points = 4,
+    title = "Breaking In? I Prefer to Call It \"Dropping By\"", points = 4,
     description = "Clear Level 11: Water Quality Control Center on Normal difficulty or higher",
-    id = 354498, badge = "399422", published = "9/9/2023 12:33:16 AM", modified = "9/16/2023 8:18:23 PM",
+    id = 354498, badge = "411224", published = "9/9/2023 12:33:16 AM", modified = "10/19/2023 12:53:13 AM",
     trigger = ClearedLevel(normal_difficulty, level_11, results_level_11)
 )
 
 achievement(
-    title = "This'd be really homey if I were a spider or a corpse", points = 4,
+    title = "This’d Be Really Homey if I Were a Spider or a Corpse", points = 4,
     description = "Clear Level 12: Undersea Base on Normal difficulty or higher",
-    id = 354499, badge = "399492", published = "9/9/2023 12:48:44 AM", modified = "9/16/2023 8:18:23 PM",
+    id = 354499, badge = "411225", published = "9/9/2023 12:48:44 AM", modified = "10/19/2023 12:53:14 AM",
     trigger = ClearedLevel(normal_difficulty, level_12, results_level_12)
 )
 
 achievement(
-    title = "Don't blame yourselves, the vault's all mine!", points = 5,
+    title = "Don’t Blame Yourselves, the Vault’s All Mine!", points = 5,
     description = "Clear Level 13: Genetics Laboratory on Normal difficulty or higher",
-    id = 354503, badge = "399496", published = "9/9/2023 1:20:28 AM", modified = "9/16/2023 8:18:24 PM",
+    id = 354503, badge = "411226", published = "9/9/2023 1:20:28 AM", modified = "10/19/2023 12:53:16 AM",
     trigger = ClearedLevel(normal_difficulty, level_13, results_level_13)
 )
 
 achievement(
-    title = "They're like damn cockroaches!", points = 5,
+    title = "They’re Like Damn Cockroaches!", points = 5,
     description = "Clear Level 14: Power Reactor on Normal difficulty or higher",
-    id = 345652, badge = "391910", published = "8/16/2023 1:32:24 AM", modified = "9/16/2023 8:18:24 PM",
+    id = 345652, badge = "411227", published = "8/16/2023 1:32:24 AM", modified = "10/19/2023 12:53:17 AM",
     trigger = ClearedLevel(normal_difficulty, level_14, results_level_14)
 )
 
 achievement(
     title = "King Lupin the Third", points = 25,
     description = "Clear Level 15: Power Center on Normal difficulty or higher and successfully steal the pink diamond",
-    id = 354509, badge = "399548", published = "9/9/2023 3:10:45 AM", modified = "9/16/2023 8:18:24 PM",
+    id = 354509, badge = "411228", published = "9/9/2023 3:10:45 AM", modified = "10/19/2023 12:53:18 AM",
     trigger = ClearedLevel(normal_difficulty, level_15_3, results_level_15)
 )
 
 achievement(
-    title = "He has all the subtly and nuance of an electrocuted baboon", points = 0,
+    title = "He Has All the Subtly and Nuance of an Electrocuted Baboon", points = 0,
     description = "Miss the last jump and get electrocuted in Level 1",
-    id = 348926, badge = "394173", published = "8/26/2023 8:51:57 PM", modified = "8/26/2023 8:51:57 PM",
+    id = 348926, badge = "411229", published = "8/26/2023 8:51:57 PM", modified = "10/19/2023 12:53:19 AM",
     trigger = InGame() && PlayerHP() == 0x00 && LevelID() == level_1 && 
               PlayerAnimationSet() == 0x27 && PlayerZLocation() > 0xFF40
 )
 
 achievement(
-    title = "A string of crimes longer than that chin of yours", points = 3,
+    title = "A String of Crimes Longer Than That Chin of Yours", points = 3,
     description = "Break every pane of glass in Level 2",
-    id = 346839, badge = "411230", published = "8/22/2023 2:20:27 AM", modified = "8/22/2023 11:49:44 PM",
+    id = 346839, badge = "411230", published = "8/22/2023 2:20:27 AM", modified = "10/21/2023 8:52:15 PM",
     trigger = InGame() && never(PlayerHP() == 0x00) && never(LevelID() != level_2) && Level2AllGlassBroken()
 )
 
 achievement(
-    title = "Ya any good at darts?", points = 4,
+    title = "Ya Any Good at Darts?", points = 4,
     description = "Alert an enemy and then lure them into getting knocked out with an arrow trap in Level 3",
-    id = 357455, badge = "402676", published = "9/21/2023 10:54:01 PM", modified = "9/21/2023 10:54:01 PM",
+    id = 357455, badge = "411231", published = "9/21/2023 10:54:01 PM", modified = "10/19/2023 12:53:21 AM",
     trigger = InGame() && never(PlayerHP() == 0x00) && never(LevelID() != level_3) && trigger_when(IsAnyEnemyAlertAndHitWithArrowTrapLevel3())
 )
 
 achievement(
-    title = "Punks thought they were dealing with amateurs", points = 5,
+    title = "Punks Thought They Were Dealing With Amateurs", points = 5,
     description = "Climb to the top of the mountain without ever falling back down to a previous section in Level 4",
-    id = 354689, badge = "399668", published = "9/9/2023 10:41:36 PM", modified = "9/11/2023 10:53:38 PM",
+    id = 354689, badge = "411232", published = "9/9/2023 10:41:36 PM", modified = "10/19/2023 12:53:23 AM",
     trigger = InGame() && never(LevelID() != level_4_1) && never(PlayerHP() == 0) && StartOfLevel4() && once(PlayerZLocation() > 0xFFF0) &&
               OneWayZPositionCheckpointPassed(0xFFB2, 0xFFCD) && OneWayZPositionCheckpointPassed(0xFEFD, 0xFF1C) &&
               OneWayZPositionCheckpointPassed(0xFE9A, 0xFEAB) && OneWayZPositionCheckpointPassed(0xFE0E, 0xFE34) &&
@@ -845,9 +845,9 @@ achievement(
 )
 
 achievement(
-    title = "Hey, I wonder what gas station they stole this key from", points = 5,
+    title = "Hey, I Wonder What Gas Station They Stole This Key From", points = 5,
     description = "Get the key to the temple within 2 minutes and 10 seconds from starting in Level 5",
-    id = 354699, badge = "399690", published = "9/9/2023 11:51:09 PM", modified = "9/9/2023 11:51:09 PM",
+    id = 354699, badge = "411233", published = "9/9/2023 11:51:09 PM", modified = "10/19/2023 12:53:24 AM",
     trigger = InGame() && never(PlayerHP() == 0x00) && once(PlayerHP() == 0x10) && LevelID() == level_5_1 && StartOfLevel() &&
               ResetIfTimeSpentInLevelExceeds(Seconds(130), level_5_1) && unless(GamePaused() > 0x00) && trigger_when(Level5KeyCollected())
 )
@@ -855,24 +855,24 @@ achievement(
 achievement(
     title = "Holy Humpty Mc-Dumpty", points = 3,
     description = "Knock out an unaware enemy with the pillar trap in Level 6",
-    id = 346234, badge = "391911", published = "8/19/2023 2:17:29 AM", modified = "9/19/2023 10:25:38 PM",
+    id = 346234, badge = "411234", published = "8/19/2023 2:17:29 AM", modified = "10/19/2023 12:53:25 AM",
     trigger = InGame() && never(PlayerHP() == 0x00) && never(LevelID() != level_6) && never(EntityKnockOutByPlayerState(EntityAddress(2)) == 0x00) &&
               never(Level6PillarRollingState() == 65426) && never(Level6PillarRollingState() == 65052) && EntityKnockedOutByPlayer(EntityAddress(2)) &&
               Level6PillarRollingState() < 65172 && Level6PillarRollingState() > 65132
 )
 
 achievement(
-    title = "The old exploding-bear-trap-in-the-ass trick", points = 3,
+    title = "The Old Exploding-Bear-Trap-In-The-Ass Trick", points = 3,
     description = "Knock out a giant cat using a land mine in Level 7",
-    id = 348928, badge = "394278", published = "8/26/2023 10:24:18 PM", modified = "9/19/2023 10:35:32 PM",
+    id = 348928, badge = "411235", published = "8/26/2023 10:24:18 PM", modified = "10/19/2023 12:53:26 AM",
     trigger = InGame() && never(PlayerHP() == 0) && LevelID() == level_7_2 &&
               ((trigger_when(EntityAnimationSet((EntityAddress(0))) == 0x18)) || (trigger_when(EntityAnimationSet((EntityAddress(1))) == 0x18)))
 )
 
 achievement(
-    title = "I'm good through, well, pretty much the rest of my friggin' life", points = 5,
+    title = "I’m Good Through, Well, Pretty Much the Rest of My Friggin’ Life", points = 5,
     description = "Stay on the conveyor belt without falling off for 3 minutes straight in Level 8",
-    id = 346499, badge = "411236", published = "8/21/2023 1:08:47 AM", modified = "9/9/2023 11:54:39 PM",
+    id = 346499, badge = "411236", published = "8/21/2023 1:08:47 AM", modified = "10/21/2023 8:53:46 PM",
     trigger = InGame() && never(PlayerHP() == 0) && LevelID() == level_8 &&
               unless(GamePaused() > 0) && never((PlayerXLocation() > 607 || PlayerXLocation() < 571)) && 
               never((PlayerYLocation() < 743 || PlayerYLocation() > 1139)) && never(PlayerZLocation() > 65498) && 
@@ -880,17 +880,17 @@ achievement(
 )
 
 achievement(
-    title = "You just keep diddling your damn riddle!", points = 2,
+    title = "You Just Keep Diddling Your Damn Riddle!", points = 2,
     description = "Solve the door puzzle and then reset it before entering the watchtower in Level 9",
-    id = 355158, badge = "400251", published = "9/11/2023 11:24:09 PM", modified = "9/19/2023 10:45:12 PM",
+    id = 355158, badge = "411237", published = "9/11/2023 11:24:09 PM", modified = "10/19/2023 12:53:29 AM",
     trigger = InGame() && never(LevelID() != level_9_1) && never(PlayerHP() == 0x00) && StartOfLevel() &&
               trigger_when((prev(Level9PuzzleDoorState()) == 0x04 && Level9PuzzleDoorState() == 0x00))
 )
 
 achievement(
-    title = "Eins!  Zwei!  Drei!  ...And whatever the hell four is in German!", points = 10,
+    title = "Eins! Zwei! Drei! ...And Whatever the Hell Four Is in German!", points = 10,
     description = "Drop all enemies into the water in a single run of the level in Level 10",
-    id = 357897, badge = "403119", published = "9/24/2023 2:11:50 AM", modified = "9/24/2023 2:13:29 AM",
+    id = 357897, badge = "411238", published = "9/24/2023 2:11:50 AM", modified = "10/19/2023 12:53:30 AM",
     trigger = InGame() && never(LevelID() != level_10_1 && LevelID() != level_10_2) && never(PlayerHP() == 0x00) &&
               trigger_when(AreAllTreasureRoomEnemiesInWaterLevel10() && AreAllMainAreaEnemiesInWaterLevel10())
 )
@@ -898,40 +898,40 @@ achievement(
 achievement(
     title = "The \"Lupin Run\"", points = 4,
     description = "Begin running down the top slope and don't stop until reaching the very bottom of the level in Level 11",
-    id = 347191, badge = "392530", published = "8/23/2023 12:44:17 AM", modified = "9/9/2023 11:58:56 PM",
+    id = 347191, badge = "411239", published = "8/23/2023 12:44:17 AM", modified = "10/19/2023 12:53:31 AM",
     trigger = InGame() && never(PlayerHP() == 0x00) && never(LevelID() != level_11) &&
                never((PlayerAnimationSet() != 0x3A && PlayerAnimationSet() != 0x08)) && once(PlayerZLocation() < 64275 &&
                PlayerAnimationSet() == 0x08) && PlayerZLocation() > 65509
 )
 
 achievement(
-    title = "Either I'm loaded, or the ceiling's getting lower", points = 5,
+    title = "Either I’m Loaded, or the Ceiling’s Getting Lower", points = 5,
     description = "Crush two spiders at the same time with a piston trap in Level 12",
-    id = 362140, badge = "407708",
+    id = 362140, badge = "411240", published = "10/8/2023 12:36:07 AM", modified = "10/19/2023 12:53:32 AM",
     trigger = InGame() && never(LevelID() != level_12) && never(PlayerHP() == 0x00) &&
               never(PistonTrapReset(Level12PistonATimer())) && never(PistonTrapReset(Level12PistonBTimer())) && tally(2, SpidersCrushedOnThisFrame())
 )
 
 achievement(
-    title = "He thrives on chaos!", points = 10,
+    title = "He Thrives on Chaos!", points = 10,
     description = "Have every single enemy in an alert state at the same time after collecting the treasure in Level 13",
-    id = 357899, badge = "403121", published = "9/24/2023 3:08:44 AM", modified = "9/24/2023 3:08:44 AM",
+    id = 357899, badge = "411241", published = "9/24/2023 3:08:44 AM", modified = "10/19/2023 12:53:36 AM",
     trigger = InGame() && never(LevelID() != level_13) && never(PlayerHP() == 0x00) && never(!IsTreasureCollected()) &&
               never(IsAnyEnemyHealthDepleted()) && trigger_when(AreAllEnemiesAlert())
 )
 
 achievement(
-    title = "Don't turn around!", points = 10,
+    title = "Don’t Turn Around!", points = 10,
     description = "Knock out 5 enemies after using a single flash grenade before it's effect wears off in Level 14",
-    id = 358173, badge = "403382",
+    id = 358173, badge = "411242", published = "9/24/2023 4:52:36 PM", modified = "10/19/2023 12:53:38 AM",
     trigger = InGame() && never(LevelID() != level_14) && never(PlayerHP() == 0x00) && never(FlashGrenadeTimer() == 0x00) &&
               never(prev(FlashGrenadeTimer()) < FlashGrenadeTimer()) && tally(5, EnemiesKnockedOutInThisFrame())
 )
 
 achievement(
-    title = "They just helped us help ourselves", points = 5,
+    title = "They Just Helped Us Help Ourselves", points = 5,
     description = "Open all four tetromino puzzle doors in a single run of the level in Level 15",
-    id = 366004, badge = "412051",
+    id = 366004, badge = "412051", published = "10/21/2023 8:48:06 PM", modified = "10/21/2023 8:48:06 PM",
     trigger = InGame() && never(LevelID() != level_15_2) && never(PlayerHP() == 0x00) &&
               trigger_when(once(Level15DoorPuzzleState() == 0x01 && Level15DoorPuzzleJTetrominoState() == 0x00) &&
               once(Level15DoorPuzzleState() == 0x01 && Level15DoorPuzzleTTetrominoState() == 0x00) &&
@@ -940,38 +940,45 @@ achievement(
 )
 
 achievement(
-    title = "And not just shot, but shot!  And then shot a couple more times!", points = 5,
+    title = "And Not Just Shot, but Shot! And Then Shot a Couple More Times!", points = 5,
     description = "In a single session, play as Lupin and hit enemies with gunshots from his Walther P38 a total of 15 times (excludes Survival Mode)",
-    id = 358249, badge = "403580",
+    id = 358249, badge = "411244", published = "9/25/2023 1:10:34 AM", modified = "10/19/2023 12:53:40 AM",
     trigger = PauseIfNotInGame() && never(!PlayingAsLupin()) && measured(tally(15, EnemiesHitInThisFrameByGun(animation_gun_lupin)), always_true())
 )
 
 achievement(
-    title = "Show's over, eat lead", points = 5,
+    title = "Show’s Over, Eat Lead", points = 5,
     description = "In a single session, play as Jigen and hit enemies with gunshots from his revolver a total of 15 times (excludes Survival Mode)",
-    id = 358251, badge = "403582",
+    id = 358251, badge = "411245", published = "9/25/2023 1:40:33 AM", modified = "10/19/2023 12:53:41 AM",
     trigger = PauseIfNotInGame() && never(!PlayingAsJigen()) && measured(tally(15, EnemiesHitInThisFrameByGun(animation_gun_jigen)), always_true())
 )
 
 achievement(
-    title = "Once again, I've cut another worthless object", points = 5,
+    title = "Once Again, I’ve Cut Another Worthless Object", points = 5,
     description = "In a single session, play as Goemon and hit enemies with the Zantetsuken's blade a total of 15 times (excludes Survival Mode)",
-    id = 359063, badge = "404479",
+    id = 359063, badge = "411246", published = "9/27/2023 12:00:26 AM", modified = "10/19/2023 12:53:41 AM",
     trigger = PauseIfNotInGame() && never(!PlayingAsGoemon()) && measured(tally(15, EnemiesHitInThisFrameByZantetsuken()), always_true())
 )
 
 achievement(
-    title = "Allergic to death", points = 3,
+    title = "Allergic to Death", points = 4,
     description = "With 1 HP remaining, heal yourself completely using a gold healing item (excludes Survival Mode)",
-    id = 347600, badge = "393057", published = "8/24/2023 12:33:58 AM", modified = "8/30/2023 2:05:51 AM",
+    id = 347600, badge = "411247", published = "8/24/2023 12:33:58 AM", modified = "10/19/2023 12:53:42 AM",
     trigger = InGame() && once(PlayerHP() == 0x01) && never((PlayerHP() > 0x01 && PlayerHP() < 0x10)) &&
               (prev(PlayerHeldGoldHealItems()) - PlayerHeldGoldHealItems()) == 0x01
 )
 
 achievement(
-    title = "The problem is, he watches too many damn cartoons", points = 3,
+    title = "A Conman Is a Better Actor Than an Actor Is a Conman", points = 3,
+    description = "In a single session, spend a total of at least 60 seconds in various disguises",
+    id = 361123, badge = "411248", published = "10/3/2023 10:39:59 PM", modified = "10/19/2023 12:53:43 AM",
+    trigger = GameState() == 0x12 && repeated(Seconds(60), DisguiseStatus() == 0x01)
+)
+
+achievement(
+    title = "The Problem Is, He Watches Too Many Damn Cartoons", points = 3,
     description = "Walk across electrified terrain using the rubber boots",
-    id = 354505, badge = "399498", published = "9/9/2023 1:25:43 AM", modified = "9/19/2023 10:55:52 PM",
+    id = 354505, badge = "411249", published = "9/9/2023 1:25:43 AM", modified = "10/19/2023 12:53:43 AM",
     trigger = InGame() && never(PlayerHP() == 0x00) && PlayerRubberBootsFlag() == 0x01 &&
               PlayerOverElectricFloorFlag() == 0x04 &&
               ((LevelID() == level_6 && PlayerZLocation() == 65535) ||
@@ -980,95 +987,32 @@ achievement(
 )
 
 achievement(
-    title = "A conman is a better actor than an actor is a conman", points = 3,
-    description = "In a single session, spend a total of at least 60 seconds in various disguises",
-    id = 361123, badge = "406556",
-    trigger = GameState() == 0x12 && repeated(Seconds(60), DisguiseStatus() == 0x01)
-)
-
-achievement(
-    title = "I just love it when our victims are punctual", points = 5,
+    title = "I Just Love It When Our Victims Are Punctual", points = 5,
     description = "In a single Survival Mode run, place a total of 5 land mines",
-    id = 361126, badge = "411250",
+    id = 361126, badge = "411250", published = "10/3/2023 11:41:59 PM", modified = "10/21/2023 8:56:53 PM",
     trigger = InSurvivalMode() && never(SurvivalModePlayerHealth() == 0x00) && repeated(5, prev(SurvivalModeLandMinesHeld()) > SurvivalModeLandMinesHeld())
 )
 
 achievement(
-    title = "It's torture!  Get me some asprin!", points = 5,
+    title = "It’s Torture! Get Me Some Asprin!", points = 5,
     description = "In a single Survival Mode run, use a total of 5 flash grenades",
-    id = 361125, badge = "411251",
+    id = 361125, badge = "411251", published = "10/3/2023 11:33:18 PM", modified = "10/21/2023 8:57:00 PM",
     trigger = InSurvivalMode() && never(SurvivalModePlayerHealth() == 0x00) && repeated(5, prev(SurvivalModeFlashGrenadesHeld()) > SurvivalModeFlashGrenadesHeld())
 )
 
 achievement(
-    title = "The guy's possessed, he could probably bench press Shaq", points = 10,
-    description = "Clear Survival Mode as Lupin in less than 25 minutes on Hard difficulty",
-    id = 360746, badge = "406222",
-    trigger = InSurvivalMode() && never(SurvivalModeTimer() == 0x00) && never(SurvivalModePlayerHealth() == 0x00) &&
-              GameDifficulty() == hard_difficulty && PlayingAsLupin() && never(SurvivalModeTimer() >= 30000) && once(prev(SurvivalModeTimer()) == 0 && SurvivalModeTimer() == 1) &&
-              trigger_when(once(prev(SurvivalModeRound()) == 0x01) && once(prev(SurvivalModeRound()) == 0x3A) && SurvivalModeRound() == 0x3B && SurvivalModeEnemyCount() == 0x00)
+    title = "I Always Wanted to Master the Funky Pharaoh", points = 5,
+    description = "In a single session, dodge enemy attacks a total of 15 times (excludes Survival Mode)",
+    id = 355176, badge = "411252", published = "9/12/2023 12:23:01 AM", modified = "10/19/2023 12:53:45 AM",
+    trigger = measured(repeated(15, ((((DemoMode() == 0x00 && GameState() == 0x12 && PlayerHP() > 0x00 && prev(PlayerAnimationSet()) == 0x20 &&
+              PlayerAnimationSet() != 0x20) || prev(PlayerAnimationSet()) == 0x21) && PlayerAnimationSet() != 0x21) ||
+              prev(PlayerAnimationSet()) == 0x22) && PlayerAnimationSet() != 0x22), always_true(), "raw")
 )
 
 achievement(
-    title = "Gettin' Jigen with it", points = 10,
-    description = "Clear Survival Mode as Jigen in less than 7 minutes on Easy difficulty",
-    id = 360728, badge = "406212",
-    trigger = InSurvivalMode() && never(SurvivalModeTimer() == 0x00) && never(SurvivalModePlayerHealth() == 0x00) &&
-              GameDifficulty() == easy_difficulty && PlayingAsJigen() && never(SurvivalModeTimer() >= 8400) && once(prev(SurvivalModeTimer()) == 0 && SurvivalModeTimer() == 1) &&
-              trigger_when(once(prev(SurvivalModeRound()) == 0x01) && once(prev(SurvivalModeRound()) == 0x26) && SurvivalModeRound() == 0x27 && SurvivalModeEnemyCount() == 0x00)
-)
-
-achievement(
-    title = "GOEMON ISHIKAWA IS IN THE HOUSE!!!", points = 10,
-    description = "Clear Survival Mode as Goemon in less than 15 minutes on Normal difficulty",
-    id = 346458, badge = "391912", published = "8/20/2023 5:16:30 PM", modified = "9/9/2023 12:56:28 AM",
-    trigger = InSurvivalMode() && never(SurvivalModeTimer() == 0x00) && never(SurvivalModePlayerHealth() == 0x00) &&
-              GameDifficulty() == normal_difficulty && PlayingAsGoemon() && never(SurvivalModeTimer() >= 18000) && once(prev(SurvivalModeTimer()) == 0 && SurvivalModeTimer() == 1) &&
-              trigger_when(once(prev(SurvivalModeRound()) == 0x01) && once(prev(SurvivalModeRound()) == 0x26) && SurvivalModeRound() == 0x27 && SurvivalModeEnemyCount() == 0x00)
-)
-
-achievement(
-    title = "Temporary Interim Alliance Agreement", points = 10,
-    description = "Play as Zenigata and defeat the final boss in Level 15 after having freed Lupin, Jigen, and Goemon and having them all survive the final boss fight on Hard difficulty",
-    id = 360311, badge = "405779",
-    trigger = InGame() && PlayingAsZenigata() && GameDifficultyIs(hard_difficulty) && never(LevelID() != level_15_3) && never(!IsFinalBossLoadedIn()) && FinalBossFightAllPartnersExistAndStillAlive() &&
-              trigger_when(IsFinalBossHealthDepletedOnThisFrame())
-)
-
-achievement(
-    title = "Dammit, I'm good", points = 10,
-    description = "Achieve a perfect score of 100 in any level on Hyper difficulty",
-    id = 360041, badge = "405387",
-    trigger = AtLevelResultsScreenNotTreasureRoom() && GameDifficulty() == hyper_difficulty && ResultsScreenTotalScore() == 100
-)
-
-achievement(
-    title = "Are we too career-oriented?", points = 25,
-    description = "After clearing a level, have a current combined total score of 1400 or more across all levels",
-    id = 360312, badge = "405780",
-    trigger = GameState() == 0x00 && measured(CurrentTotalGameScore() >= 1400, ProgressionFlag() > 0x02, "raw") && prev(CurrentMenuScreen()) == 0x09 && (CurrentMenuScreen() == 0x06 || CurrentMenuScreen() == 0x07)
-)
-
-achievement(
-    title = "Exceeding the speed limit", points = 50,
-    description = "Begin a New Game and complete a single-segment speedrun in under 1 hour, on any difficulty",
-    id = 359320, badge = "405803",
-    trigger = once(StartedNewGame()) && ResetIfTimeExceeds(Seconds(3600)) && never(ProgressionFlag() < 0x02) && ResetIfGameSaveIsLoaded() &&
-              trigger_when(Level15StolePinkDiamond())
-)
-
-achievement(
-    title = "Those'll kill ya... gimme one", points = 1,
-    description = "Take a 3 minute smoke break",
-    id = 346484, badge = "391944", published = "8/21/2023 12:08:18 AM", modified = "9/9/2023 10:46:49 PM",
-    trigger = InGame() && never(PlayerAnimationSet() != 0x03) && 
-              unless(GamePaused() > 0) && trigger_when(repeated(Seconds(180), PlayerAnimationSet() == 0x03))
-)
-
-achievement(
-    title = "Floating through the air like pixies", points = 2,
+    title = "Floating Through the Air Like Pixies", points = 2,
     description = "Avoid falling by swimming through the air",
-    id = 346465, badge = "411253", published = "8/20/2023 6:52:10 PM", modified = "9/19/2023 11:10:34 PM",
+    id = 346465, badge = "411253", published = "8/20/2023 6:52:10 PM", modified = "10/21/2023 8:58:54 PM",
     trigger = InGame() && never((prev(PlayerAnimationSet()) == 86 || prev(PlayerAnimationSet()) == 83 ||
                prev(PlayerAnimationSet()) == 0x5F || prev(PlayerAnimationSet()) == 0x00)) && once(PlayerAnimationSet() == 0x16) &&
               ((prev(PlayerAnimationSet()) == 0x11 && (PlayerAnimationSet() == 0x56 || PlayerAnimationSet() == 0x53 || PlayerAnimationSet() == 0x5F || PlayerAnimationSet() == 0x00)) ||
@@ -1079,49 +1023,93 @@ achievement(
 )
 
 achievement(
-    title = "I always wanted to master the Funky Pharaoh", points = 5,
-    description = "In a single session, dodge enemy attacks a total of 15 times",
-    id = 355176, badge = "404483", published = "9/12/2023 12:23:01 AM", modified = "9/12/2023 12:23:01 AM",
-    trigger = measured(repeated(15, ((((DemoMode() == 0x00 && GameState() == 0x12 && PlayerHP() > 0x00 && prev(PlayerAnimationSet()) == 0x20 &&
-              PlayerAnimationSet() != 0x20) || prev(PlayerAnimationSet()) == 0x21) && PlayerAnimationSet() != 0x21) ||
-              prev(PlayerAnimationSet()) == 0x22) && PlayerAnimationSet() != 0x22), always_true(), "raw")
+    title = "Those’ll Kill Ya... Gimme One", points = 1,
+    description = "Take a 3 minute smoke break",
+    id = 346484, badge = "411254", published = "8/21/2023 12:08:18 AM", modified = "10/19/2023 12:53:46 AM",
+    trigger = InGame() && never(PlayerAnimationSet() != 0x03) && 
+              unless(GamePaused() > 0) && trigger_when(repeated(Seconds(180), PlayerAnimationSet() == 0x03))
 )
 
 achievement(
     title = "Friggin' Lupin", points = 2,
     description = "Play as Lupin and land a punch on one of your partners",
-    id = 354507, badge = "411255", published = "9/9/2023 2:31:26 AM", modified = "9/15/2023 12:56:47 AM",
+    id = 354507, badge = "411255", published = "9/9/2023 2:31:26 AM", modified = "10/21/2023 8:59:03 PM",
     trigger = InGame() && PlayingAsLupin() && PlayerIsPunching() && IsPlayerDamagingAnyPartner()
 )
 
 achievement(
-    title = "Red's probably not the best color for trying to be inconspicuous", points = 3,
-    description = "Play as Part I Lupin or Part III Lupin and complete any level without alerting a single enemy",
-    id = 361369, badge = "406723",
-    trigger = (PlayerCostume() == 0x00 || PlayerCostume() == 0x02 ) && AtLevelResultsScreenNotTreasureRoom() && ResultsScreenTimesAlertedEnemies() == 0
+    title = "The Guy’s Possessed, He Could Probably Bench Press Shaq", points = 25,
+    description = "Clear Survival Mode as Lupin in less than 25 minutes on Hard difficulty",
+    id = 360746, badge = "411256", published = "10/3/2023 12:19:54 AM", modified = "10/19/2023 12:53:47 AM",
+    trigger = InSurvivalMode() && never(SurvivalModeTimer() == 0x00) && never(SurvivalModePlayerHealth() == 0x00) &&
+              GameDifficulty() == hard_difficulty && PlayingAsLupin() && never(SurvivalModeTimer() >= 30000) && once(prev(SurvivalModeTimer()) == 0 && SurvivalModeTimer() == 1) &&
+              trigger_when(once(prev(SurvivalModeRound()) == 0x01) && once(prev(SurvivalModeRound()) == 0x3A) && SurvivalModeRound() == 0x3B && SurvivalModeEnemyCount() == 0x00)
 )
 
 achievement(
-    title = "Inspector Origami", points = 1,
-    description = "Play as Zenigata and get crushed by a piston trap in Level 12",
-    id = 345747, badge = "407707", published = "8/17/2023 2:11:34 AM", modified = "8/26/2023 10:25:52 PM",
-    trigger = InGame() && PlayingAsZenigata() && never(LevelID() != level_12) && never(prior(PlayerHP()) == 0x00) &&
-              PlayerHP() == 0x00 && PlayerAnimationSet() == 0x07
+    title = "Gettin’ Jigen With It", points = 10,
+    description = "Clear Survival Mode as Jigen in less than 7 minutes on Easy difficulty",
+    id = 360728, badge = "411257", published = "10/2/2023 11:29:21 PM", modified = "10/19/2023 12:53:48 AM",
+    trigger = InSurvivalMode() && never(SurvivalModeTimer() == 0x00) && never(SurvivalModePlayerHealth() == 0x00) &&
+              GameDifficulty() == easy_difficulty && PlayingAsJigen() && never(SurvivalModeTimer() >= 8400) && once(prev(SurvivalModeTimer()) == 0 && SurvivalModeTimer() == 1) &&
+              trigger_when(once(prev(SurvivalModeRound()) == 0x01) && once(prev(SurvivalModeRound()) == 0x26) && SurvivalModeRound() == 0x27 && SurvivalModeEnemyCount() == 0x00)
 )
 
 achievement(
-    title = "A three-minute egg must boil for three minutes", points = 5,
+    title = "GOEMON ISHIKAWA IS IN THE HOUSE!!!", points = 25,
+    description = "Clear Survival Mode as Goemon in less than 15 minutes on Normal difficulty",
+    id = 346458, badge = "411258", published = "8/20/2023 5:16:30 PM", modified = "10/19/2023 12:53:48 AM",
+    trigger = InSurvivalMode() && never(SurvivalModeTimer() == 0x00) && never(SurvivalModePlayerHealth() == 0x00) &&
+              GameDifficulty() == normal_difficulty && PlayingAsGoemon() && never(SurvivalModeTimer() >= 18000) && once(prev(SurvivalModeTimer()) == 0 && SurvivalModeTimer() == 1) &&
+              trigger_when(once(prev(SurvivalModeRound()) == 0x01) && once(prev(SurvivalModeRound()) == 0x26) && SurvivalModeRound() == 0x27 && SurvivalModeEnemyCount() == 0x00)
+)
+
+achievement(
+    title = "A Three-Minute Egg Must Boil for Three Minutes", points = 10,
     description = "Play as Goemon and collect all 6 items in less than 3 minutes in Level 3",
-    id = 364399, badge = "410034",
+    id = 364399, badge = "411259", published = "10/15/2023 9:33:19 PM", modified = "10/19/2023 12:53:49 AM",
     trigger = InGame() && PlayingAsGoemon() && never(LevelID() != level_3) && once(PlayerHP() == 0x10) && StartOfLevel() && never(PlayerHP() == 0x00) &&
               ResetIfTimeSpentInLevelExceeds(Seconds(180), level_3) && unless(GamePaused() > 0x00) &&
               trigger_when(ItemPickedUp(0x1B3B64) && ItemPickedUp(0x1B3B6C) && ItemPickedUp(0x1B3B70) && ItemPickedUp(0x1B3B74) && ItemPickedUp(0x1B3B78) && ItemPickedUp(0x1B3B7C))
 )
 
 achievement(
-    title = "Lemme check my wallet", points = 5,
+    title = "I Would Have to Say He Dug up the Treasure and Hid It in His Ass", points = 10,
+    description = "Play as Goemon and collect the treasure without alerting any of the enemies in Level 4",
+    id = 364778, badge = "411260", published = "10/17/2023 1:08:10 AM", modified = "10/19/2023 12:53:49 AM",
+    trigger = InGame() && PlayingAsGoemon() && never(LevelID() != level_4_1 && LevelID() != level_4_2) && never(PlayerHP() == 0x00) &&
+              never(TimesSpottedByUniqueEnemiesInGame() > 0x00) &&
+              trigger_when(prev(TrasureCollectedLevelFlag()) == 0x00 && TrasureCollectedLevelFlag() == 0x03)
+)
+
+achievement(
+    title = "Inspector Origami", points = 1,
+    description = "Play as Zenigata and get crushed by a piston trap in Level 12",
+    id = 345747, badge = "411262", published = "8/17/2023 2:11:34 AM", modified = "10/19/2023 12:53:50 AM",
+    trigger = InGame() && PlayingAsZenigata() && never(LevelID() != level_12) && never(prior(PlayerHP()) == 0x00) &&
+              PlayerHP() == 0x00 && PlayerAnimationSet() == 0x07
+)
+
+achievement(
+    title = "Temporary Interim Alliance Agreement", points = 10,
+    description = "Play as Zenigata and defeat the final boss in Level 15 after having freed Lupin, Jigen, and Goemon and having them all survive the final boss fight on Hard difficulty",
+    id = 360311, badge = "411261", published = "10/1/2023 10:34:00 PM", modified = "10/19/2023 12:53:50 AM",
+    trigger = InGame() && PlayingAsZenigata() && GameDifficultyIs(hard_difficulty) && never(LevelID() != level_15_3) && never(!IsFinalBossLoadedIn()) && FinalBossFightAllPartnersExistAndStillAlive() &&
+              trigger_when(IsFinalBossHealthDepletedOnThisFrame())
+)
+
+achievement(
+    title = "I Bet They Don’t Have Problems With Drunk Drivers Around Here", points = 10,
+    description = "Reach the control room after crossing the moving bridge in Level 15 on Hyper difficulty",
+    id = 358195, badge = "411243", published = "9/24/2023 5:36:08 PM", modified = "10/21/2023 9:00:34 PM",
+    trigger = InGame() && never(LevelID() != level_15_1 && LevelID() != level_15_transition && LevelID() != level_15_2)  && GameDifficultyIs(hyper_difficulty) &&
+              once(LevelID() == level_15_1) && trigger_when(LevelID() == level_15_2)
+)
+
+achievement(
+    title = "Lemme Check My Wallet", points = 5,
     description = "Use 3 different items from your inventory within a span of 5 seconds (excludes Survival Mode)",
-    id = 364434, badge = "411263",
+    id = 364434, badge = "411263", published = "10/16/2023 12:44:01 AM", modified = "10/19/2023 2:12:25 AM",
     trigger = InGame() && never(PlayerHP() == 0x00) && never(word(0x191358) != 0xe200) && ResetIfTimeAfterFirstItemUseExceeds(Seconds(5)) && unless(GamePaused() > 0x00) &&
               ((once(UsedLandMine()) && once(UsedFlashGrenade()) && once(UsedDisguise())) ||
               (once(UsedLandMine()) && once(UsedFlashGrenade()) && once(UsedSpecialAttackAmmo())) ||
@@ -1146,28 +1134,32 @@ achievement(
 )
 
 achievement(
-    title = "I would have to say he dug up the treasure and hid it in his ass", points = 5,
-    description = "Play as Goemon and collect the treasure without alerting any of the enemies in Level 4",
-    id = 364778, badge = "410337",
-    trigger = InGame() && PlayingAsGoemon() && never(LevelID() != level_4_1 && LevelID() != level_4_2) && never(PlayerHP() == 0x00) &&
-              never(TimesSpottedByUniqueEnemiesInGame() > 0x00) &&
-              trigger_when(prev(TrasureCollectedLevelFlag()) == 0x00 && TrasureCollectedLevelFlag() == 0x03)
+    title = "Red’s Probably Not the Best Color for Trying to Be Inconspicuous", points = 5,
+    description = "Play as Part I Lupin or Part III Lupin and complete any level without alerting a single enemy",
+    id = 361369, badge = "411264", published = "10/5/2023 12:30:54 AM", modified = "10/19/2023 12:53:51 AM",
+    trigger = (PlayerCostume() == 0x00 || PlayerCostume() == 0x02 ) && AtLevelResultsScreenNotTreasureRoom() && ResultsScreenTimesAlertedEnemies() == 0
 )
 
 achievement(
-    title = "Now, let's try to end this one like Jaws!", points = 5,
-    description = "Play as Jigen and disarm all of the enemy placed land mines in Level 7",
-    trigger = InGame() && PlayingAsGoemon() && never(LevelID() != level_4_1 && LevelID() != level_4_2) && never(PlayerHP() == 0x00) &&
-              ResetIfTimeSpentInLevelExceeds(Seconds(180), level_3) && unless(GamePaused() > 0x00) &&
-              trigger_when(ItemPickedUp(0x1B3B64) && ItemPickedUp(0x1B3B6C) && ItemPickedUp(0x1B3B70) && ItemPickedUp(0x1B3B74) && ItemPickedUp(0x1B3B78) && ItemPickedUp(0x1B3B7C))
+    title = "Dammit, I'm Good", points = 10,
+    description = "Achieve a perfect score of 100 in any level on Hyper difficulty",
+    id = 360041, badge = "411265", published = "10/1/2023 1:53:50 AM", modified = "10/19/2023 12:53:52 AM",
+    trigger = AtLevelResultsScreenNotTreasureRoom() && GameDifficulty() == hyper_difficulty && ResultsScreenTotalScore() == 100
 )
 
 achievement(
-    title = "I bet they don't have problems with drunk drivers around here", points = 10,
-    description = "Reach the control room after crossing the moving bridge in Level 15 on Hyper difficulty",
-    id = 358195, badge = "411243",
-    trigger = InGame() && never(LevelID() != level_15_1 && LevelID() != level_15_transition && LevelID() != level_15_2)  && GameDifficultyIs(hyper_difficulty) &&
-              once(LevelID() == level_15_1) && trigger_when(LevelID() == level_15_2)
+    title = "Are We Too Career-Oriented?", points = 25,
+    description = "After clearing a level, have a current combined total score of 1400 or more across all levels",
+    id = 360312, badge = "411266", published = "10/1/2023 10:38:26 PM", modified = "10/19/2023 12:53:52 AM",
+    trigger = GameState() == 0x00 && measured(CurrentTotalGameScore() >= 1400, ProgressionFlag() > 0x02, "raw") && prev(CurrentMenuScreen()) == 0x09 && (CurrentMenuScreen() == 0x06 || CurrentMenuScreen() == 0x07)
+)
+
+achievement(
+    title = "Exceeding the Speed Limit", points = 50,
+    description = "Begin a New Game and complete a single-segment speedrun in under 1 hour, with any character, on any difficulty",
+    id = 359320, badge = "411267", published = "9/28/2023 12:11:27 AM", modified = "10/19/2023 12:53:53 AM",
+    trigger = once(StartedNewGame()) && ResetIfTimeExceeds(Seconds(3600)) && never(ProgressionFlag() < 0x02) && ResetIfGameSaveIsLoaded() &&
+              trigger_when(Level15StolePinkDiamond())
 )
 
 // --------------------
