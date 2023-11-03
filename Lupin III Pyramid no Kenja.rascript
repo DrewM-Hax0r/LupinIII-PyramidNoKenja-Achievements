@@ -1134,7 +1134,7 @@ achievement(
 )
 
 achievement(
-    title = "Red’s Probably Not the Best Color for Trying to Be Inconspicuous", points = 5,
+    title = "Red’s Probably Not the Best Color for Being Inconspicuous", points = 5,
     description = "Play as Part I Lupin or Part III Lupin and complete any level without alerting a single enemy",
     id = 361369, badge = "411264", published = "10/5/2023 12:30:54 AM", modified = "10/19/2023 12:53:51 AM",
     trigger = (PlayerCostume() == 0x00 || PlayerCostume() == 0x02 ) && AtLevelResultsScreenNotTreasureRoom() && ResultsScreenTimesAlertedEnemies() == 0
