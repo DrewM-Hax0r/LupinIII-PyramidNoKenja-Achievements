@@ -456,6 +456,10 @@ function InMenus() => GameState() == 0x00
 
 function GameSaveIsLoaded() => GameState() == 0x00 && CurrentMenuScreen() == 0x08 && prev(LoadSaveTriggerFlag()) == 0x00 && LoadSaveTriggerFlag() == 0x01
 
+function CancelNewGame() => ProgressionFlag() == 0x02 && prev(CurrentMenuScreen()) == 0x02 && CurrentMenuScreen() == 0x00
+
+function ResetIfCancelNewGame() => never(CancelNewGame())
+
 function ResetIfGameSaveIsLoaded() => never(GameSaveIsLoaded())
 
 function IsTreasureCollected() => TrasureCollectedLevelFlag() == 0x03
@@ -1158,7 +1162,7 @@ achievement(
     title = "Exceeding the Speed Limit", points = 50,
     description = "Begin a New Game and complete a single-segment speedrun in under 1 hour, with any character, on any difficulty",
     id = 359320, badge = "411267", published = "9/28/2023 12:11:27 AM", modified = "10/19/2023 12:53:53 AM",
-    trigger = once(StartedNewGame()) && ResetIfTimeExceeds(Seconds(3600)) && never(ProgressionFlag() < 0x02) && ResetIfGameSaveIsLoaded() &&
+    trigger = once(StartedNewGame()) && ResetIfTimeExceeds(Seconds(3600)) && never(ProgressionFlag() < 0x02) && ResetIfCancelNewGame() && ResetIfGameSaveIsLoaded() &&
               trigger_when(Level15StolePinkDiamond())
 )
 
@@ -1182,7 +1186,7 @@ leaderboard(
     title = "Single-Segment Speedrun (Normal Difficulty, Lupin Only)",
     description = "Fastest time for starting a new game and beating it in a single session, playing as Lupin on Normal Difficulty",
     start = StartedNewGame(),
-    cancel = GameSaveIsLoaded() || GameDifficulty() != normal_difficulty || !PlayingAsLupin() || ProgressionFlag() < 0x02,
+    cancel = CancelNewGame() || GameSaveIsLoaded() || GameDifficulty() != normal_difficulty || !PlayingAsLupin() || ProgressionFlag() < 0x02,
     submit = Level15StolePinkDiamond(),
     value = measured(tally(0, ProgressionFlag() > 0x01)),
     format = "FRAMES",
