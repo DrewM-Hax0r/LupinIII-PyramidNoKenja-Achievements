@@ -464,8 +464,8 @@ function ResetIfGameSaveIsLoaded() => never(GameSaveIsLoaded())
 
 function IsTreasureCollected() => TrasureCollectedLevelFlag() == 0x03
 
-function ClearedLevel(min_difficulty, level_id, results_level_id) => NotInDemoMode() && never(PlayerHP() == 0x00) && never(GameDifficulty() < min_difficulty) &&
-              once(LevelID() == level_id) && InMenus() && prev(GameState()) == 0x12 && ResultsScreenLevelID() == results_level_id
+function ClearedLevel(min_difficulty, results_level_id) => NotInDemoMode() && GameDifficulty() >= min_difficulty &&
+              InMenus() && prev(GameState()) == 0x12 && ResultsScreenLevelID() == results_level_id
               
 function AtLevelResultsScreenNotTreasureRoom() => InMenus() && CurrentMenuScreen() == 0x09
 
@@ -714,105 +714,105 @@ achievement(
     title = "The Return of Lupin the Third", points = 1,
     description = "Clear Level 1: Pyramid Entrance on Normal difficulty or higher",
     id = 350710, badge = "411214", published = "8/30/2023 1:49:07 AM", modified = "10/19/2023 12:52:55 AM",
-    trigger = ClearedLevel(normal_difficulty, level_1, results_level_1)
+    trigger = ClearedLevel(normal_difficulty, results_level_1)
 )
 
 achievement(
     title = "So This Is Where Dick Clark Lives", points = 1,
     description = "Clear Level 2: Underground Fortress on Normal difficulty or higher",
     id = 353504, badge = "411215", published = "9/4/2023 10:13:00 PM", modified = "10/19/2023 12:52:57 AM",
-    trigger = ClearedLevel(normal_difficulty, level_2, results_level_2)
+    trigger = ClearedLevel(normal_difficulty, results_level_2)
 )
 
 achievement(
     title = "The Friggin’ Grave Robbers Here Had It Made", points = 1,
     description = "Clear Level 3: Desert Tower on Normal difficulty or higher",
     id = 350711, badge = "411216", published = "8/30/2023 1:54:57 AM", modified = "10/19/2023 12:52:59 AM",
-    trigger = ClearedLevel(normal_difficulty, level_3, results_level_3)
+    trigger = ClearedLevel(normal_difficulty, results_level_3)
 )
 
 achievement(
     title = "What, Are You Gonna Climb Mt. Everest or Something?", points = 2,
     description = "Clear Level 4: Mountain Fortress on Normal difficulty or higher",
     id = 353858, badge = "411217", published = "9/6/2023 1:58:13 AM", modified = "10/19/2023 12:53:00 AM",
-    trigger = ClearedLevel(normal_difficulty, level_4_1, results_level_4)
+    trigger = ClearedLevel(normal_difficulty, results_level_4)
 )
 
 achievement(
     title = "Do They Replace All Those Pillars Every Time Someone Comes Here?", points = 2,
     description = "Clear Level 5: Ancient Ruins on Normal difficulty or higher",
     id = 353859, badge = "411218", published = "9/6/2023 2:06:51 AM", modified = "10/19/2023 12:53:03 AM",
-    trigger = ClearedLevel(normal_difficulty, level_5_1, results_level_5)
+    trigger = ClearedLevel(normal_difficulty, results_level_5)
 )
 
 achievement(
     title = "I’d Actually Rather Be in Disneyland", points = 2,
     description = "Clear Level 6: Valley Fortress on Normal difficulty or higher",
     id = 353860, badge = "411219", published = "9/6/2023 2:12:46 AM", modified = "10/19/2023 12:53:06 AM",
-    trigger = ClearedLevel(normal_difficulty, level_6, results_level_6)
+    trigger = ClearedLevel(normal_difficulty, results_level_6)
 )
 
 achievement(
     title = "It’s Time for a Round of Big Bang Boomerang", points = 3,
     description = "Clear Level 7: Jungle Temple on Normal difficulty or higher",
     id = 354172, badge = "411220", published = "9/8/2023 12:23:30 AM", modified = "10/19/2023 12:53:08 AM",
-    trigger = ClearedLevel(normal_difficulty, level_7_1, results_level_7)
+    trigger = ClearedLevel(normal_difficulty, results_level_7)
 )
 
 achievement(
     title = "I Think the Jungle’s Getting to Him", points = 3,
     description = "Clear Level 8: Botanical Research Institute on Normal difficulty or higher",
     id = 354173, badge = "411221", published = "9/8/2023 12:29:33 AM", modified = "10/19/2023 12:53:09 AM",
-    trigger = ClearedLevel(normal_difficulty, level_8, results_level_8)
+    trigger = ClearedLevel(normal_difficulty, results_level_8)
 )
 
 achievement(
     title = "Dammit, This Is Very Mysterious, and I Hate Mysteries!", points = 3,
     description = "Clear Level 9: Jungle Watchtower on Normal difficulty or higher",
     id = 354175, badge = "411222", published = "9/8/2023 1:25:54 AM", modified = "10/19/2023 12:53:10 AM",
-    trigger = ClearedLevel(normal_difficulty, level_9_2, results_level_9)
+    trigger = ClearedLevel(normal_difficulty, results_level_9)
 )
 
 achievement(
     title = "One of Those Three Hour Tours You Hear About on Nick at Nite", points = 4,
     description = "Clear Level 10: Artificial Island on Normal difficulty or higher",
     id = 354497, badge = "411223", published = "9/9/2023 12:16:05 AM", modified = "10/19/2023 12:53:11 AM",
-    trigger = ClearedLevel(normal_difficulty, level_10_1, results_level_10)
+    trigger = ClearedLevel(normal_difficulty, results_level_10)
 )
 
 achievement(
     title = "Breaking In? I Prefer to Call It \"Dropping By\"", points = 4,
     description = "Clear Level 11: Water Quality Control Center on Normal difficulty or higher",
     id = 354498, badge = "411224", published = "9/9/2023 12:33:16 AM", modified = "10/19/2023 12:53:13 AM",
-    trigger = ClearedLevel(normal_difficulty, level_11, results_level_11)
+    trigger = ClearedLevel(normal_difficulty, results_level_11)
 )
 
 achievement(
     title = "This’d Be Really Homey if I Were a Spider or a Corpse", points = 4,
     description = "Clear Level 12: Undersea Base on Normal difficulty or higher",
     id = 354499, badge = "411225", published = "9/9/2023 12:48:44 AM", modified = "10/19/2023 12:53:14 AM",
-    trigger = ClearedLevel(normal_difficulty, level_12, results_level_12)
+    trigger = ClearedLevel(normal_difficulty, results_level_12)
 )
 
 achievement(
     title = "Don’t Blame Yourselves, the Vault’s All Mine!", points = 5,
     description = "Clear Level 13: Genetics Laboratory on Normal difficulty or higher",
     id = 354503, badge = "411226", published = "9/9/2023 1:20:28 AM", modified = "10/19/2023 12:53:16 AM",
-    trigger = ClearedLevel(normal_difficulty, level_13, results_level_13)
+    trigger = ClearedLevel(normal_difficulty, results_level_13)
 )
 
 achievement(
     title = "They’re Like Damn Cockroaches!", points = 5,
     description = "Clear Level 14: Power Reactor on Normal difficulty or higher",
     id = 345652, badge = "411227", published = "8/16/2023 1:32:24 AM", modified = "10/19/2023 12:53:17 AM",
-    trigger = ClearedLevel(normal_difficulty, level_14, results_level_14)
+    trigger = ClearedLevel(normal_difficulty, results_level_14)
 )
 
 achievement(
     title = "King Lupin the Third", points = 25,
     description = "Clear Level 15: Power Center on Normal difficulty or higher and successfully steal the pink diamond",
     id = 354509, badge = "411228", published = "9/9/2023 3:10:45 AM", modified = "10/19/2023 12:53:18 AM",
-    trigger = ClearedLevel(normal_difficulty, level_15_3, results_level_15)
+    trigger = ClearedLevel(normal_difficulty, results_level_15)
 )
 
 achievement(
