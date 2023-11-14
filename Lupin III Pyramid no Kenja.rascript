@@ -831,7 +831,7 @@ achievement(
     title = "He Has All the Subtly and Nuance of an Electrocuted Baboon", points = 0,
     description = "Miss the last jump and get electrocuted in Level 1",
     id = 348926, badge = "411229", published = "8/26/2023 8:51:57 PM", modified = "10/19/2023 12:53:19 AM",
-    trigger = InGame() && PlayerHP() == 0x00 && LevelID() == level_1 && 
+    trigger = InGame() && prev(PlayerHP()) > 0x00 && PlayerHP() == 0x00 && LevelID() == level_1 && 
               PlayerAnimationSet() == 0x27 && PlayerZLocation() > 0xFF40
 )
 
