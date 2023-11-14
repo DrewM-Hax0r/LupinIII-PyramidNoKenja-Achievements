@@ -654,10 +654,22 @@ function StartOfLevel() => once(prev(GameState()) == 0x00 && GameState() == 0x12
 function RollingBoulderInDefaultStateLevel4() => byte(0x0068B1) == 0x00
 function StartOfLevel4() => once(prev(GameState()) == 0x00 && GameState() == 0x12) || once(prev(PlayerHP()) == 0x00 && PlayerHP() == 0x10) || once(RollingBoulderInDefaultStateLevel4())
 
-function Level2AllGlassBroken() => byte(0x0047F6) == 0x00 && byte(0x0057FE) == 0x00 && byte(0x0049AE) == 0x00 && 
-              byte(0x004B0A) == 0x00 && byte(0x005E8A) == 0x00 && byte(0x00854C) == 0x00 && byte(0x013246) == 0x00 &&
-              byte(0x004ED4) == 0x00 && byte(0x008554) == 0x00 && byte(0x009CFC) == 0x00 && byte(0x011E3E) == 0x00 &&
-              byte(0x00F8CC) == 0x00 && byte(0x00FED4) == 0x00
+function Level2AllGlassBroken() {
+    result = []
+    array_push(result, once(prev(byte(0x0047F6)) > 0x00 && byte(0x0047F6) == 0x00))
+    array_push(result, once(prev(byte(0x0057FE)) > 0x00 && byte(0x0057FE) == 0x00))
+    array_push(result, once(prev(byte(0x0049AE)) > 0x00 && byte(0x0049AE) == 0x00))
+    array_push(result, once(prev(byte(0x004B0A)) > 0x00 && byte(0x004B0A) == 0x00))
+    array_push(result, once(prev(byte(0x005E8A)) > 0x00 && byte(0x005E8A) == 0x00))
+    array_push(result, once(prev(byte(0x013246)) > 0x00 && byte(0x013246) == 0x00))
+    array_push(result, once(prev(byte(0x004ED4)) > 0x00 && byte(0x004ED4) == 0x00))
+    array_push(result, once(prev(byte(0x008554)) > 0x00 && byte(0x008554) == 0x00))
+    array_push(result, once(prev(byte(0x009CFC)) > 0x00 && byte(0x009CFC) == 0x00))
+    array_push(result, once(prev(byte(0x011E3E)) > 0x00 && byte(0x011E3E) == 0x00))
+    array_push(result, once(prev(byte(0x00F8CC)) > 0x00 && byte(0x00F8CC) == 0x00))
+    array_push(result, once(prev(byte(0x00FED4)) > 0x00 && byte(0x00FED4) == 0x00))
+    return measured(tally(12, result))
+}
 
 function Level5KeyCollected() => once(once(prev(Level5KeyFlag()) == 0x00) && Level5KeyFlag() == 0x01)
 
